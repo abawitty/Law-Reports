@@ -14,28 +14,29 @@ datasource db {
 }
 
 model User {
-  id             String    @id @default(cuid())
-  fullName       String
-  surname        String?
-  firstName      String?
-  studentId      String    @unique
-  email          String    @unique
-  phone          String?
-  whatsapp       String?
-  program        String?
-  level          String?
-  faculty        String?
-  occupation     String?
-  constituency   String?
-  sex            String?
-  dateOfBirth    DateTime?
-  hasVotersId    Boolean?
-  signature      String?
-  hasGhanaCard   Boolean   @default(false)
-  passwordHash   String
-  role           String    @default("MEMBER")
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  id                 String    @id @default(cuid())
+  fullName           String
+  surname            String?
+  firstName          String?
+  studentId          String    @unique
+  email              String    @unique
+  phone              String?
+  whatsapp           String?
+  program            String?
+  level              String?
+  faculty            String?
+  occupation         String?
+  constituency       String?
+  sex                String?
+  dateOfBirth        DateTime?
+  hasVotersId        Boolean?
+  signature          String?
+  hasGhanaCard       Boolean   @default(false)
+  passwordHash       String
+  mustChangePassword Boolean   @default(false)
+  role               String    @default("MEMBER")
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
 
   votes    Vote[]
   requests MemberRequest[]
