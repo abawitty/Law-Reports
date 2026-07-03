@@ -56,6 +56,28 @@ export default async function DashboardPage() {
     );
   }
 
+  if (user.approvalStatus !== "APPROVED") {
+    return (
+      <div>
+        <PageHero
+          eyebrow="Member Dashboard"
+          title="Membership Pending Approval"
+          description="Your registration has been received. An executive will review and approve your membership, after which your official membership number will be assigned and your full dashboard unlocked."
+        />
+        <section className="mx-auto max-w-xl px-4 py-14 sm:px-6">
+          <div className="rounded-xl border border-dashed border-black/15 bg-gray-50 p-6 text-sm text-gray-600">
+            You&apos;re logged in as <strong>{user.fullName}</strong> ({user.studentId}). There&apos;s
+            nothing further to do right now — check back once you&apos;ve been notified, or{" "}
+            <a href="/contact" className="font-semibold text-brand-green hover:underline">
+              contact the executives
+            </a>{" "}
+            if this is taking longer than expected.
+          </div>
+        </section>
+      </div>
+    );
+  }
+
   const [elections, requests, myVotes] = await Promise.all([
     prisma.election.findMany({
       where: { status: { in: ["OPEN", "CLOSED"] } },
@@ -82,7 +104,11 @@ export default async function DashboardPage() {
       <PageHero
         eyebrow="Member Dashboard"
         title={`Welcome, ${user.fullName.split(" ")[0]}`}
-        description="View your data, vote in open elections, and submit requests or suggestions."
+        description={
+          user.membershipNumber
+            ? `Membership No. ${user.membershipNumber} — view your data, vote in open elections, and submit requests or suggestions.`
+            : "View your data, vote in open elections, and submit requests or suggestions."
+        }
       />
 
       {(user.role === "ADMIN" || user.role === "EXECUTIVE") && (

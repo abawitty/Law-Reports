@@ -27,6 +27,8 @@ export async function GET() {
     "firstName",
     "email",
     "studentId",
+    "membershipNumber",
+    "approvalStatus",
     "phone",
     "whatsapp",
     "dateOfBirth",

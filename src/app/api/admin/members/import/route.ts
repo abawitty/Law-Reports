@@ -76,8 +76,16 @@ export async function POST(req: Request) {
       continue;
     }
 
+    const membershipNumber = cell(r, "membershipNumber") || null;
+
     const existing = await prisma.user.findFirst({
-      where: { OR: [{ studentId }, { email }] },
+      where: {
+        OR: [
+          { studentId },
+          { email },
+          ...(membershipNumber ? [{ membershipNumber }] : []),
+        ],
+      },
     });
     if (existing) {
       results.push({
@@ -89,7 +97,9 @@ export async function POST(req: Request) {
         reason:
           existing.studentId === studentId
             ? "Student ID already exists"
-            : "Email already exists",
+            : existing.email === email
+              ? "Email already exists"
+              : "Membership number already exists",
       });
       continue;
     }
@@ -107,6 +117,7 @@ export async function POST(req: Request) {
         surname,
         firstName,
         studentId,
+        membershipNumber,
         email,
         phone: cell(r, "phone") || null,
         whatsapp: cell(r, "whatsapp") || null,

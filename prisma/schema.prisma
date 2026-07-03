@@ -19,6 +19,8 @@ model User {
   surname            String?
   firstName          String?
   studentId          String    @unique
+  membershipNumber   String?   @unique
+  approvalStatus     String    @default("APPROVED")
   email              String    @unique
   phone              String?
   whatsapp           String?
