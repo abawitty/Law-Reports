@@ -50,6 +50,8 @@ export const ideologyContentSchema = z.object({
   philosophyIntro: z.string(),
   philosophyCards: z.array(titleBody),
   manifestoText: z.string(),
+  nationalLeaderName: z.string(),
+  nationalLeaderTitle: z.string(),
 });
 
 export const resourcesContentSchema = z.object({

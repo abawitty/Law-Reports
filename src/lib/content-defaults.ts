@@ -52,6 +52,8 @@ export type IdeologyContent = {
   philosophyIntro: string;
   philosophyCards: TitleBody[];
   manifestoText: string;
+  nationalLeaderName: string;
+  nationalLeaderTitle: string;
 };
 
 export type ResourcesContent = {
@@ -221,6 +223,8 @@ export const IDEOLOGY_DEFAULTS: IdeologyContent = {
   ],
   manifestoText:
     "The NDC's national manifesto and policy documents are published on the party's official website, ndc.org.gh. TEIN-KUC & NDC's own chapter manifesto and policy priorities will be linked here once published by the executive team. Members can request the latest documents via the Contact page.",
+  nationalLeaderName: "H.E. John Dramani Mahama",
+  nationalLeaderTitle: "President of the Republic of Ghana & Leader of the NDC",
 };
 
 export const RESOURCES_DEFAULTS: ResourcesContent = {

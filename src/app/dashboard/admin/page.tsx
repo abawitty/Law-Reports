@@ -48,6 +48,12 @@ export default async function AdminPage() {
           >
             Edit Site Content &amp; Images →
           </Link>
+          <Link
+            href="/dashboard/admin/gallery"
+            className="inline-block rounded-md border border-brand-green px-4 py-2 text-sm font-semibold text-brand-green hover:bg-brand-green/5"
+          >
+            Manage Photo Gallery →
+          </Link>
         </div>
 
         <div>

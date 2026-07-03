@@ -63,6 +63,33 @@ export function IdeologyContentForm({ initial }: { initial: IdeologyContent }) {
         emptyRow={{ title: "", body: "" }}
       />
 
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            National leader name
+          </label>
+          <input
+            value={data.nationalLeaderName}
+            onChange={(e) => field("nationalLeaderName", e.target.value)}
+            className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-brand-green focus:outline-none focus:ring-1 focus:ring-brand-green"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            National leader title
+          </label>
+          <input
+            value={data.nationalLeaderTitle}
+            onChange={(e) => field("nationalLeaderTitle", e.target.value)}
+            className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-brand-green focus:outline-none focus:ring-1 focus:ring-brand-green"
+          />
+        </div>
+      </div>
+      <p className="-mt-4 text-xs text-gray-500">
+        The photo itself is uploaded from Site Content → Images &amp; Logos → National Leadership
+        Photo.
+      </p>
+
       <div>
         <label className="block text-sm font-medium text-gray-700">Manifesto text</label>
         <textarea

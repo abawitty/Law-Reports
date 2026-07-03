@@ -44,6 +44,22 @@ export const changePasswordSchema = z
     path: ["confirmNewPassword"],
   });
 
+export const completeProfileSchema = z.object({
+  surname: z.string().trim().min(1, "Enter your surname"),
+  firstName: z.string().trim().min(1, "Enter your first name"),
+  dateOfBirth: z.string().trim().min(1, "Enter your date of birth"),
+  sex: z.enum(["Male", "Female"], { message: "Select your sex" }),
+  occupation: z.string().trim().min(1, "Enter your occupation"),
+  faculty: z.string().trim().min(1, "Enter your faculty"),
+  program: z.string().trim().min(1, "Enter your programme"),
+  level: z.string().trim().min(1, "Select your level"),
+  constituency: z.string().trim().min(1, "Enter your constituency of residence"),
+  hasVotersId: z.enum(["Yes", "No"], { message: "Select an option" }),
+  phone: z.string().trim().min(1, "Enter your phone number"),
+  whatsapp: z.string().trim().min(1, "Enter your WhatsApp number"),
+  signature: z.string().trim().min(1, "Enter your initials"),
+});
+
 export const profileUpdateSchema = z.object({
   fullName: z.string().trim().min(2),
   email: z.string().trim().email(),
