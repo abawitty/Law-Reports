@@ -2,21 +2,41 @@ import Link from "next/link";
 import { getPageContent } from "@/lib/content";
 import { prisma } from "@/lib/prisma";
 import { GallerySlider } from "@/components/gallery-slider";
+import { getSiteImageMeta, siteImageUrl } from "@/lib/site-images";
 
 export default async function Home() {
-  const [content, photos] = await Promise.all([
+  const [content, photos, heroPhoto] = await Promise.all([
     getPageContent("home"),
     prisma.galleryPhoto.findMany({
       orderBy: { createdAt: "desc" },
       take: 10,
       select: { id: true, caption: true },
     }),
+    getSiteImageMeta("home-hero-photo"),
   ]);
+  const heroPhotoUrl = heroPhoto.exists
+    ? siteImageUrl("home-hero-photo", heroPhoto.version)
+    : undefined;
 
   return (
     <div>
-      <section className="relative overflow-hidden bg-gradient-to-br from-brand-green-dark via-brand-green to-brand-green-dark text-white">
-        <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:px-6 sm:py-24 lg:grid-cols-2 lg:items-center">
+      <section className="relative overflow-hidden text-white">
+        {heroPhotoUrl && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={heroPhotoUrl}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        )}
+        <div
+          className={`absolute inset-0 ${
+            heroPhotoUrl
+              ? "bg-gradient-to-br from-brand-green-dark/95 via-brand-green-dark/80 to-brand-green-dark/95"
+              : "bg-gradient-to-br from-brand-green-dark via-brand-green to-brand-green-dark"
+          }`}
+        />
+        <div className="relative mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:px-6 sm:py-24 lg:grid-cols-2 lg:items-center">
           <div>
             <p className="text-sm font-semibold uppercase tracking-widest text-white">
               {content.heroEyebrow}
