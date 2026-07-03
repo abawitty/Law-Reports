@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { randomUUID } from "crypto";
 import bcrypt from "bcryptjs";
 import { parse } from "csv-parse/sync";
 import type { Prisma } from "@prisma/client";
@@ -69,6 +70,12 @@ function toBool(value: string): boolean | null {
   return null;
 }
 
+// Used as this member's login ID when a row has neither a Student ID nor a
+// membership number to identify them with.
+function generatePlaceholderId(row: number): string {
+  return `PENDING-${row}-${randomUUID().slice(0, 8)}`;
+}
+
 export async function POST(req: Request) {
   const check = await getAdminSession();
   if ("error" in check) {
@@ -103,18 +110,6 @@ export async function POST(req: Request) {
   }
 
   const fieldMap = buildFieldMap(Object.keys(records[0]));
-  const missingRequired = ["surname", "firstName"].filter((k) => !fieldMap[k]);
-  if (!fieldMap.studentId && !fieldMap.membershipNumber) {
-    missingRequired.push("studentId or membershipNumber");
-  }
-  if (missingRequired.length > 0) {
-    return NextResponse.json(
-      {
-        error: `Couldn't find a column for: ${missingRequired.join(", ")}. Check your CSV headers match the template (surname, firstName, and either studentId or membershipNumber are required).`,
-      },
-      { status: 400 },
-    );
-  }
 
   // Pre-fetch every existing studentId/email/membershipNumber in one query
   // instead of one lookup per row — keeps large imports fast enough to
@@ -124,13 +119,16 @@ export async function POST(req: Request) {
     const firstName = cell(r, fieldMap, "firstName");
     const email = cell(r, fieldMap, "email") || null;
     const membershipNumber = cell(r, fieldMap, "membershipNumber") || null;
-    // Historical records often have no separate Student ID — fall back to
-    // the membership number as the login identifier in that case.
-    const studentId = cell(r, fieldMap, "studentId") || membershipNumber || "";
-    return { rowNum: i + 2, r, studentId, surname, firstName, email, membershipNumber };
+    const rawStudentId = cell(r, fieldMap, "studentId");
+    // A row exported from a spreadsheet as a trailing blank line still
+    // parses to a record of empty strings — treat that as nothing to import.
+    const isBlankRow = Object.values(r).every((v) => !v || !v.trim());
+    return { rowNum: i + 2, r, rawStudentId, surname, firstName, email, membershipNumber, isBlankRow };
   });
 
-  const candidateStudentIds = rowsData.map((d) => d.studentId).filter(Boolean);
+  const candidateStudentIds = rowsData
+    .map((d) => d.rawStudentId || d.membershipNumber)
+    .filter((v): v is string => !!v);
   const candidateEmails = rowsData.map((d) => d.email).filter((v): v is string => !!v);
   const candidateMembershipNumbers = rowsData
     .map((d) => d.membershipNumber)
@@ -161,15 +159,22 @@ export async function POST(req: Request) {
   const toCreate: { row: ImportResult; data: Prisma.UserCreateManyInput }[] = [];
 
   for (const d of rowsData) {
-    const fullName = `${d.firstName} ${d.surname}`.trim();
-    const base = { row: d.rowNum, studentId: d.studentId, fullName, email: d.email };
-
-    if (!d.studentId || !d.surname || !d.firstName) {
-      results.push({ ...base, status: "skipped", reason: "Missing required field (surname, firstName, or a studentId/membershipNumber)" });
+    if (d.isBlankRow) {
+      results.push({ row: d.rowNum, studentId: "", fullName: "", email: null, status: "skipped", reason: "Empty row" });
       continue;
     }
-    if (existingStudentIds.has(d.studentId) || seenStudentIds.has(d.studentId)) {
-      results.push({ ...base, status: "skipped", reason: "Student ID already exists" });
+
+    // Never skip a row for missing surname/firstName or missing identifiers —
+    // fall back to a membership number, or a generated placeholder, so every
+    // row with any data at all gets an account. Admins can fill in the rest
+    // (real Student ID, full name, etc.) later.
+    const studentId = d.rawStudentId || d.membershipNumber || generatePlaceholderId(d.rowNum);
+    const nameParts = [d.firstName, d.surname].filter(Boolean).join(" ");
+    const fullName = nameParts || `Unnamed Member (${studentId})`;
+    const base = { row: d.rowNum, studentId, fullName, email: d.email };
+
+    if (existingStudentIds.has(studentId) || seenStudentIds.has(studentId)) {
+      results.push({ ...base, status: "skipped", reason: "Member ID already exists" });
       continue;
     }
     if (d.email && (existingEmails.has(d.email) || seenEmails.has(d.email))) {
@@ -181,7 +186,7 @@ export async function POST(req: Request) {
       continue;
     }
 
-    seenStudentIds.add(d.studentId);
+    seenStudentIds.add(studentId);
     if (d.email) seenEmails.add(d.email);
     if (d.membershipNumber) seenMembershipNumbers.add(d.membershipNumber);
 
@@ -195,9 +200,9 @@ export async function POST(req: Request) {
       row: { ...base, status: "created", initialPassword },
       data: {
         fullName,
-        surname: d.surname,
-        firstName: d.firstName,
-        studentId: d.studentId,
+        surname: d.surname || null,
+        firstName: d.firstName || null,
+        studentId,
         membershipNumber: d.membershipNumber,
         email: d.email,
         phone: cell(d.r, fieldMap, "phone") || null,

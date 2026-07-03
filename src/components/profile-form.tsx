@@ -70,7 +70,7 @@ export function ProfileForm({
         )}
         <dl className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
           <div>
-            <dt className="text-gray-500">Student ID</dt>
+            <dt className="text-gray-500">Member ID</dt>
             <dd className="font-medium text-gray-900">{studentId}</dd>
           </div>
           <div>
