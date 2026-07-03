@@ -1,8 +1,17 @@
 import Link from "next/link";
 import { getPageContent } from "@/lib/content";
+import { prisma } from "@/lib/prisma";
+import { GallerySlider } from "@/components/gallery-slider";
 
 export default async function Home() {
-  const content = await getPageContent("home");
+  const [content, photos] = await Promise.all([
+    getPageContent("home"),
+    prisma.galleryPhoto.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 10,
+      select: { id: true, caption: true },
+    }),
+  ]);
 
   return (
     <div>
@@ -62,6 +71,20 @@ export default async function Home() {
           ))}
         </div>
       </section>
+
+      {photos.length > 0 && (
+        <section className="mx-auto max-w-6xl px-4 pb-16 sm:px-6">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h2 className="text-2xl font-bold text-brand-green-dark">Recent Activities</h2>
+            <Link href="/media" className="text-sm font-semibold text-brand-green hover:underline">
+              View all photos →
+            </Link>
+          </div>
+          <div className="mt-6">
+            <GallerySlider photos={photos} />
+          </div>
+        </section>
+      )}
 
       <section className="bg-gray-50 py-16">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">

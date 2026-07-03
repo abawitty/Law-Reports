@@ -133,3 +133,13 @@ model SiteImage {
   mimeType  String
   updatedAt DateTime @updatedAt
 }
+
+// Admin-uploaded activity photos shown in the homepage slider and the
+// Media page. Served via /api/gallery-photo/[id].
+model GalleryPhoto {
+  id        String   @id @default(cuid())
+  caption   String?
+  data      Bytes
+  mimeType  String
+  createdAt DateTime @default(now())
+}

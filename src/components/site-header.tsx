@@ -12,6 +12,7 @@ const NAV_LINKS = [
   { href: "/ideology", label: "Ideology" },
   { href: "/membership", label: "Membership" },
   { href: "/resources", label: "Resources" },
+  { href: "/media", label: "Media" },
   { href: "/contact", label: "Contact" },
 ];
 

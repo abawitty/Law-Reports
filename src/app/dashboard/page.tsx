@@ -5,9 +5,11 @@ import { prisma } from "@/lib/prisma";
 import { PageHero } from "@/components/page-hero";
 import { ProfileForm } from "@/components/profile-form";
 import { ChangePasswordForm } from "@/components/change-password-form";
+import { CompleteProfileForm } from "@/components/complete-profile-form";
 import { ElectionsPanel } from "@/components/elections-panel";
 import { RequestForm } from "@/components/request-form";
 import { RequestList } from "@/components/request-list";
+import { isProfileIncomplete } from "@/lib/profile";
 
 export const metadata: Metadata = {
   title: "My Dashboard",
@@ -31,6 +33,24 @@ export default async function DashboardPage() {
         />
         <section className="mx-auto max-w-md px-4 py-14 sm:px-6">
           <ChangePasswordForm forced />
+        </section>
+      </div>
+    );
+  }
+
+  if (isProfileIncomplete(user)) {
+    return (
+      <div>
+        <PageHero
+          eyebrow="Member Dashboard"
+          title="Complete Your Profile"
+          description="Some details from your membership record are missing. Please fill them in to continue to your dashboard."
+        />
+        <section className="mx-auto max-w-xl px-4 py-14 sm:px-6">
+          <CompleteProfileForm
+            initialSurname={user.surname ?? ""}
+            initialFirstName={user.firstName ?? ""}
+          />
         </section>
       </div>
     );
