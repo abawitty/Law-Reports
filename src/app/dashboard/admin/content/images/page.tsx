@@ -24,7 +24,7 @@ export default async function ImagesContentPage() {
       <PageHero
         eyebrow="Admin Panel"
         title="Images & Logos"
-        description="Upload PNG, JPEG, WebP, or SVG files up to 5MB."
+        description="Upload PNG, JPEG, WebP, or SVG files up to 4MB."
       />
 
       <section className="mx-auto max-w-2xl space-y-5 px-4 py-10 sm:px-6">
