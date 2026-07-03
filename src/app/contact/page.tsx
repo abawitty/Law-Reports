@@ -50,7 +50,7 @@ export default function ContactPage() {
             <div className="mt-5 space-y-3 rounded-xl border border-black/10 p-5 text-sm text-gray-700">
               <p>
                 <span className="font-semibold text-gray-900">Address: </span>
-                Koforidua University College, Koforidua, Eastern Region, Ghana
+                Kings University College, Ghana
               </p>
               <p>
                 <span className="font-semibold text-gray-900">Email: </span>

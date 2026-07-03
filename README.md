@@ -1,7 +1,7 @@
 # TEIN-KUC & NDC Portal
 
 Official website for TEIN-KUC (Tertiary Education Institutions Network,
-Koforidua University College chapter) in partnership with the NDC. The
+Kings University College chapter) in partnership with the NDC. The
 site provides student information (Student Loan Trust Fund guidance, Ghana
 Card support, academic support) and a member portal for registration,
 online elections, and submitting queries/suggestions/requests to leadership.

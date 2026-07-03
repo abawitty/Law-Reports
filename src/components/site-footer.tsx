@@ -8,7 +8,7 @@ export function SiteFooter() {
         <div>
           <Logo variant="dark" />
           <p className="mt-3 text-sm text-white/70">
-            Tertiary Education Institutions Network — Koforidua University College,
+            Tertiary Education Institutions Network — Kings University College,
             in partnership with the NDC. Serving students with information,
             representation, and support.
           </p>
@@ -42,7 +42,7 @@ export function SiteFooter() {
             Contact
           </h3>
           <ul className="mt-3 space-y-2 text-sm text-white/80">
-            <li>Koforidua University College, Koforidua</li>
+            <li>Kings University College, Ghana</li>
             <li><a href="mailto:info@teinkuc.org" className="hover:text-white">info@teinkuc.org</a></li>
             <li><Link href="/contact" className="hover:text-white">Contact leadership →</Link></li>
           </ul>

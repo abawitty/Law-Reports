@@ -12,4 +12,4 @@ export type RequestStatus = (typeof REQUEST_STATUSES)[number];
 
 export const ORG_NAME = "TEIN-KUC & NDC";
 export const ORG_FULL_NAME =
-  "Tertiary Education Institutions Network — Koforidua University College (in collaboration with the NDC)";
+  "Tertiary Education Institutions Network — Kings University College (in collaboration with the NDC)";
