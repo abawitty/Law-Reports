@@ -17,8 +17,10 @@ const NAV_LINKS = [
 
 export function SiteHeader({
   session,
+  logoImages,
 }: {
   session: { fullName: string; role: string } | null;
+  logoImages?: { teinKucLogoUrl?: string; ndcLogoUrl?: string };
 }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
@@ -27,7 +29,7 @@ export function SiteHeader({
     <header className="sticky top-0 z-50 border-b border-black/10 bg-white/95 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-2.5 sm:px-6">
         <Link href="/" className="shrink-0" onClick={() => setOpen(false)}>
-          <Logo />
+          <Logo images={logoImages} />
         </Link>
 
         <nav className="hidden lg:flex lg:items-center lg:gap-1">

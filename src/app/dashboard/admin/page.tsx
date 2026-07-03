@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { requireAdmin } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 import { PageHero } from "@/components/page-hero";
@@ -34,6 +35,15 @@ export default async function AdminPage() {
       />
 
       <section className="mx-auto max-w-6xl space-y-14 px-4 py-10 sm:px-6">
+        <div>
+          <Link
+            href="/dashboard/admin/content"
+            className="inline-block rounded-md bg-brand-green px-4 py-2 text-sm font-semibold text-white hover:bg-brand-green-dark"
+          >
+            Edit Site Content &amp; Images →
+          </Link>
+        </div>
+
         <div>
           <h2 className="text-xl font-bold text-brand-green-dark">Create Election</h2>
           <div className="mt-4 max-w-xl">
