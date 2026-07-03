@@ -4,6 +4,7 @@ import { requireUser } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 import { PageHero } from "@/components/page-hero";
 import { ProfileForm } from "@/components/profile-form";
+import { ChangePasswordForm } from "@/components/change-password-form";
 import { ElectionsPanel } from "@/components/elections-panel";
 import { RequestForm } from "@/components/request-form";
 import { RequestList } from "@/components/request-list";
@@ -18,6 +19,21 @@ export default async function DashboardPage() {
   const user = await prisma.user.findUnique({ where: { id: sessionUser.id } });
   if (!user) {
     return null;
+  }
+
+  if (user.mustChangePassword) {
+    return (
+      <div>
+        <PageHero
+          eyebrow="Member Dashboard"
+          title="Set a New Password"
+          description="Your account was created with a temporary password. Choose a new one to continue to your dashboard."
+        />
+        <section className="mx-auto max-w-md px-4 py-14 sm:px-6">
+          <ChangePasswordForm forced />
+        </section>
+      </div>
+    );
   }
 
   const [elections, requests, myVotes] = await Promise.all([
@@ -75,6 +91,13 @@ export default async function DashboardPage() {
               }}
               studentId={user.studentId}
             />
+          </div>
+        </div>
+
+        <div>
+          <h2 className="text-xl font-bold text-brand-green-dark">Change Password</h2>
+          <div className="mt-4 max-w-xl">
+            <ChangePasswordForm />
           </div>
         </div>
 

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { requireAdmin } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 import { PageHero } from "@/components/page-hero";
+import { ResetPasswordButton } from "@/components/admin/reset-password-button";
 
 export const metadata: Metadata = {
   title: "Members",
@@ -29,12 +30,20 @@ export default async function MembersPage() {
           <Link href="/dashboard/admin" className="text-sm font-medium text-brand-green hover:underline">
             ← Back to Admin Panel
           </Link>
-          <a
-            href="/api/admin/members/export"
-            className="rounded-md bg-brand-green px-4 py-2 text-sm font-semibold text-white hover:bg-brand-green-dark"
-          >
-            Export as CSV
-          </a>
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href="/dashboard/admin/members/import"
+              className="rounded-md bg-brand-red px-4 py-2 text-sm font-semibold text-white hover:brightness-90"
+            >
+              Bulk Import (CSV)
+            </Link>
+            <a
+              href="/api/admin/members/export"
+              className="rounded-md bg-brand-green px-4 py-2 text-sm font-semibold text-white hover:bg-brand-green-dark"
+            >
+              Export as CSV
+            </a>
+          </div>
         </div>
 
         {members.length === 0 ? (
@@ -62,6 +71,7 @@ export default async function MembersPage() {
                     "Sex",
                     "Role",
                     "Registered",
+                    "Password",
                   ].map((h) => (
                     <th
                       key={h}
@@ -89,6 +99,11 @@ export default async function MembersPage() {
                     </td>
                     <td className="whitespace-nowrap px-3 py-2 font-medium text-gray-900">
                       {m.fullName}
+                      {m.mustChangePassword && (
+                        <span className="ml-2 rounded-full bg-yellow-100 px-2 py-0.5 text-[10px] font-semibold text-yellow-800">
+                          Temp password
+                        </span>
+                      )}
                     </td>
                     <td className="whitespace-nowrap px-3 py-2 text-gray-600">{m.studentId}</td>
                     <td className="whitespace-nowrap px-3 py-2 text-gray-600">{m.email}</td>
@@ -116,6 +131,9 @@ export default async function MembersPage() {
                     <td className="whitespace-nowrap px-3 py-2 text-gray-600">{m.role}</td>
                     <td className="whitespace-nowrap px-3 py-2 text-gray-600">
                       {new Date(m.createdAt).toLocaleDateString()}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-2">
+                      <ResetPasswordButton userId={m.id} />
                     </td>
                   </tr>
                 ))}
