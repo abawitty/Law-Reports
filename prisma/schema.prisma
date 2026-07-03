@@ -1,0 +1,91 @@
+// TEIN-KUC & NDC Combined Portal — data model
+//
+// Role/ElectionStatus/RequestType/RequestStatus are plain strings rather than
+// native Postgres enums so the schema stays portable; allowed values are
+// validated in application code (see src/lib/constants.ts).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  fullName     String
+  studentId    String   @unique
+  email        String   @unique
+  phone        String?
+  program      String?
+  level        String?
+  hasGhanaCard Boolean  @default(false)
+  passwordHash String
+  role         String   @default("MEMBER")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  votes    Vote[]
+  requests MemberRequest[]
+}
+
+model Election {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  startsAt    DateTime
+  endsAt      DateTime
+  status      String   @default("DRAFT")
+  createdAt   DateTime @default(now())
+
+  positions Position[]
+}
+
+model Position {
+  id         String   @id @default(cuid())
+  title      String
+  election   Election @relation(fields: [electionId], references: [id], onDelete: Cascade)
+  electionId String
+
+  candidates Candidate[]
+  votes      Vote[]
+}
+
+model Candidate {
+  id         String   @id @default(cuid())
+  name       String
+  bio        String?
+  photoUrl   String?
+  position   Position @relation(fields: [positionId], references: [id], onDelete: Cascade)
+  positionId String
+
+  votes Vote[]
+}
+
+model Vote {
+  id          String    @id @default(cuid())
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  position    Position  @relation(fields: [positionId], references: [id], onDelete: Cascade)
+  positionId  String
+  candidate   Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  candidateId String
+  createdAt   DateTime  @default(now())
+
+  @@unique([userId, positionId])
+}
+
+model MemberRequest {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  type      String   @default("QUERY")
+  subject   String
+  message   String
+  status    String   @default("PENDING")
+  response  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
