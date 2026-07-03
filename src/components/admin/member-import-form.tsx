@@ -14,9 +14,9 @@ type ImportResult = {
 };
 
 const TEMPLATE_HEADER =
-  "studentId,surname,firstName,email,phone,whatsapp,program,level,faculty,occupation,constituency,sex,dateOfBirth,hasVotersId,hasGhanaCard";
+  "studentId,membershipNumber,surname,firstName,email,phone,whatsapp,program,level,faculty,occupation,constituency,sex,dateOfBirth,hasVotersId,hasGhanaCard";
 const TEMPLATE_EXAMPLE =
-  "20230001,Mensah,Ama,ama.mensah@example.com,0244000111,0244000111,BSc Computer Science,200,Faculty of Science,Student,Ablekuma North,Female,2000-05-15,Yes,No";
+  "20230001,TEIN-0001,Mensah,Ama,ama.mensah@example.com,0244000111,0244000111,BSc Computer Science,200,Faculty of Science,Student,Ablekuma North,Female,2000-05-15,Yes,No";
 
 function downloadBlob(filename: string, content: string, type: string) {
   const blob = new Blob([content], { type });
@@ -89,7 +89,9 @@ export function MemberImportForm() {
         <p className="mt-1 text-sm text-gray-600">
           Fill in one row per member. Only <strong>studentId</strong>, <strong>surname</strong>,{" "}
           <strong>firstName</strong>, and <strong>email</strong> are required — leave other
-          columns blank if unknown.
+          columns blank if unknown. If a member already has an official{" "}
+          <strong>membershipNumber</strong>, include it and it will be kept as-is; leave it blank
+          for members who don&apos;t have one yet.
         </p>
         <button
           type="button"

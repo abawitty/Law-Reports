@@ -117,6 +117,7 @@ export async function POST(req: Request) {
       hasVotersId: hasVotersId === "Yes",
       signature,
       passwordHash,
+      approvalStatus: "PENDING",
       photo: {
         create: {
           data: photoBytes,

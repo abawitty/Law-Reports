@@ -4,6 +4,7 @@ import { requireAdmin } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 import { PageHero } from "@/components/page-hero";
 import { ResetPasswordButton } from "@/components/admin/reset-password-button";
+import { ApproveMemberButton } from "@/components/admin/approve-member-button";
 
 export const metadata: Metadata = {
   title: "Members",
@@ -58,6 +59,8 @@ export default async function MembersPage() {
                   {[
                     "Photo",
                     "Name",
+                    "Membership No.",
+                    "Status",
                     "Student ID",
                     "Email",
                     "Phone",
@@ -104,6 +107,22 @@ export default async function MembersPage() {
                           Temp password
                         </span>
                       )}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-2 font-mono text-gray-600">
+                      {m.membershipNumber ?? (
+                        <ApproveMemberButton userId={m.id} />
+                      )}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-2">
+                      <span
+                        className={`rounded-full px-2 py-0.5 text-xs font-semibold ${
+                          m.approvalStatus === "APPROVED"
+                            ? "bg-brand-green/10 text-brand-green-dark"
+                            : "bg-yellow-100 text-yellow-800"
+                        }`}
+                      >
+                        {m.approvalStatus === "APPROVED" ? "Approved" : "Pending"}
+                      </span>
                     </td>
                     <td className="whitespace-nowrap px-3 py-2 text-gray-600">{m.studentId}</td>
                     <td className="whitespace-nowrap px-3 py-2 text-gray-600">{m.email}</td>
