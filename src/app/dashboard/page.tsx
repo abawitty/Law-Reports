@@ -129,7 +129,7 @@ export default async function DashboardPage() {
             <ProfileForm
               user={{
                 fullName: user.fullName,
-                email: user.email,
+                email: user.email ?? "",
                 phone: user.phone ?? "",
                 program: user.program ?? "",
                 level: user.level ?? "",

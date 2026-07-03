@@ -125,7 +125,7 @@ export default async function MembersPage() {
                       </span>
                     </td>
                     <td className="whitespace-nowrap px-3 py-2 text-gray-600">{m.studentId}</td>
-                    <td className="whitespace-nowrap px-3 py-2 text-gray-600">{m.email}</td>
+                    <td className="whitespace-nowrap px-3 py-2 text-gray-600">{m.email ?? "—"}</td>
                     <td className="whitespace-nowrap px-3 py-2 text-gray-600">{m.phone ?? "—"}</td>
                     <td className="whitespace-nowrap px-3 py-2 text-gray-600">
                       {m.whatsapp ?? "—"}

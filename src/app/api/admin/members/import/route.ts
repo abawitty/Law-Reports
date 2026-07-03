@@ -14,7 +14,7 @@ type ImportResult = {
   row: number;
   studentId: string;
   fullName: string;
-  email: string;
+  email: string | null;
   status: "created" | "skipped";
   reason?: string;
   initialPassword?: string;
@@ -103,13 +103,14 @@ export async function POST(req: Request) {
   }
 
   const fieldMap = buildFieldMap(Object.keys(records[0]));
-  const missingRequired = ["studentId", "surname", "firstName", "email"].filter(
-    (k) => !fieldMap[k],
-  );
+  const missingRequired = ["surname", "firstName"].filter((k) => !fieldMap[k]);
+  if (!fieldMap.studentId && !fieldMap.membershipNumber) {
+    missingRequired.push("studentId or membershipNumber");
+  }
   if (missingRequired.length > 0) {
     return NextResponse.json(
       {
-        error: `Couldn't find a column for: ${missingRequired.join(", ")}. Check your CSV headers match the template (studentId, surname, firstName, email are required).`,
+        error: `Couldn't find a column for: ${missingRequired.join(", ")}. Check your CSV headers match the template (surname, firstName, and either studentId or membershipNumber are required).`,
       },
       { status: 400 },
     );
@@ -119,16 +120,18 @@ export async function POST(req: Request) {
   // instead of one lookup per row — keeps large imports fast enough to
   // finish within the serverless function's time limit.
   const rowsData = records.map((r, i) => {
-    const studentId = cell(r, fieldMap, "studentId");
     const surname = cell(r, fieldMap, "surname");
     const firstName = cell(r, fieldMap, "firstName");
-    const email = cell(r, fieldMap, "email");
+    const email = cell(r, fieldMap, "email") || null;
     const membershipNumber = cell(r, fieldMap, "membershipNumber") || null;
+    // Historical records often have no separate Student ID — fall back to
+    // the membership number as the login identifier in that case.
+    const studentId = cell(r, fieldMap, "studentId") || membershipNumber || "";
     return { rowNum: i + 2, r, studentId, surname, firstName, email, membershipNumber };
   });
 
   const candidateStudentIds = rowsData.map((d) => d.studentId).filter(Boolean);
-  const candidateEmails = rowsData.map((d) => d.email).filter(Boolean);
+  const candidateEmails = rowsData.map((d) => d.email).filter((v): v is string => !!v);
   const candidateMembershipNumbers = rowsData
     .map((d) => d.membershipNumber)
     .filter((v): v is string => !!v);
@@ -161,15 +164,15 @@ export async function POST(req: Request) {
     const fullName = `${d.firstName} ${d.surname}`.trim();
     const base = { row: d.rowNum, studentId: d.studentId, fullName, email: d.email };
 
-    if (!d.studentId || !d.surname || !d.firstName || !d.email) {
-      results.push({ ...base, status: "skipped", reason: "Missing required field (studentId, surname, firstName, or email)" });
+    if (!d.studentId || !d.surname || !d.firstName) {
+      results.push({ ...base, status: "skipped", reason: "Missing required field (surname, firstName, or a studentId/membershipNumber)" });
       continue;
     }
     if (existingStudentIds.has(d.studentId) || seenStudentIds.has(d.studentId)) {
       results.push({ ...base, status: "skipped", reason: "Student ID already exists" });
       continue;
     }
-    if (existingEmails.has(d.email) || seenEmails.has(d.email)) {
+    if (d.email && (existingEmails.has(d.email) || seenEmails.has(d.email))) {
       results.push({ ...base, status: "skipped", reason: "Email already exists" });
       continue;
     }
@@ -179,7 +182,7 @@ export async function POST(req: Request) {
     }
 
     seenStudentIds.add(d.studentId);
-    seenEmails.add(d.email);
+    if (d.email) seenEmails.add(d.email);
     if (d.membershipNumber) seenMembershipNumbers.add(d.membershipNumber);
 
     const dobRaw = cell(d.r, fieldMap, "dateOfBirth");
