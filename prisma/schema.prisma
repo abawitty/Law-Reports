@@ -89,3 +89,24 @@ model MemberRequest {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+// Editable copy for each public page, keyed by page slug ("home", "about",
+// "ideology", "resources", "contact"). The JSON shape for each page is
+// defined in src/lib/content-defaults.ts; missing/absent rows fall back to
+// those defaults, so the site renders correctly before any admin edits.
+model PageContent {
+  id        String   @id @default(cuid())
+  page      String   @unique
+  data      Json
+  updatedAt DateTime @updatedAt
+}
+
+// Admin-uploaded images (logos, executive photos), stored as bytes so no
+// external file storage service is required. Served via /api/site-image/[key].
+model SiteImage {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  data      Bytes
+  mimeType  String
+  updatedAt DateTime @updatedAt
+}

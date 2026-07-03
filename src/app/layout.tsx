@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { AuthSessionProvider } from "@/components/session-provider";
+import { getSiteImageMeta, siteImageUrl } from "@/lib/site-images";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,7 +31,18 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth();
+  const [session, teinKucLogo, ndcLogo] = await Promise.all([
+    auth(),
+    getSiteImageMeta("tein-kuc-logo"),
+    getSiteImageMeta("ndc-logo"),
+  ]);
+
+  const logoImages = {
+    teinKucLogoUrl: teinKucLogo.exists
+      ? siteImageUrl("tein-kuc-logo", teinKucLogo.version)
+      : undefined,
+    ndcLogoUrl: ndcLogo.exists ? siteImageUrl("ndc-logo", ndcLogo.version) : undefined,
+  };
 
   return (
     <html
@@ -45,9 +57,10 @@ export default async function RootLayout({
                 ? { fullName: session.user.fullName, role: session.user.role }
                 : null
             }
+            logoImages={logoImages}
           />
           <main className="flex-1">{children}</main>
-          <SiteFooter />
+          <SiteFooter logoImages={logoImages} />
         </AuthSessionProvider>
       </body>
     </html>

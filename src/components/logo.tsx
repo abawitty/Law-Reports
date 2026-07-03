@@ -1,11 +1,54 @@
+type LogoImages = {
+  teinKucLogoUrl?: string;
+  ndcLogoUrl?: string;
+};
+
 export function Logo({
   className = "",
   variant = "light",
+  images,
 }: {
   className?: string;
   variant?: "light" | "dark";
+  images?: LogoImages;
 }) {
   const onDark = variant === "dark";
+
+  if (images?.teinKucLogoUrl) {
+    return (
+      <div className={`flex items-center gap-2.5 ${className}`}>
+        <span className="flex shrink-0 items-center gap-1.5 rounded-md bg-white p-1 shadow-sm">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={images.teinKucLogoUrl}
+            alt="TEIN-KUC logo"
+            className="h-9 w-9 object-contain"
+          />
+          {images.ndcLogoUrl && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={images.ndcLogoUrl} alt="NDC logo" className="h-9 w-9 object-contain" />
+          )}
+        </span>
+        <span className="leading-tight">
+          <span
+            className={`block text-[15px] font-bold tracking-tight ${
+              onDark ? "text-white" : "text-brand-green-dark"
+            }`}
+          >
+            TEIN-KUC
+          </span>
+          <span
+            className={`block text-[11px] font-medium -mt-0.5 ${
+              onDark ? "text-brand-gold" : "text-brand-red"
+            }`}
+          >
+            &amp; NDC
+          </span>
+        </span>
+      </div>
+    );
+  }
+
   return (
     <div className={`flex items-center gap-2.5 ${className}`}>
       <svg

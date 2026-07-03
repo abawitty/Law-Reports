@@ -1,12 +1,16 @@
 import Link from "next/link";
 import { Logo } from "@/components/logo";
 
-export function SiteFooter() {
+export function SiteFooter({
+  logoImages,
+}: {
+  logoImages?: { teinKucLogoUrl?: string; ndcLogoUrl?: string };
+}) {
   return (
     <footer className="mt-16 border-t border-black/10 bg-brand-green-dark text-white">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:px-6 md:grid-cols-4">
         <div>
-          <Logo variant="dark" />
+          <Logo variant="dark" images={logoImages} />
           <p className="mt-3 text-sm text-white/70">
             Tertiary Education Institutions Network — Kings University College,
             in partnership with the NDC. Serving students with information,
