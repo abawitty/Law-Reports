@@ -3,7 +3,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { completeProfileSchema } from "@/lib/validation";
 
-const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
+const MAX_PHOTO_BYTES = 4 * 1024 * 1024;
 const ALLOWED_PHOTO_TYPES = new Set(["image/png", "image/jpeg", "image/webp"]);
 
 export async function PATCH(req: Request) {
@@ -58,7 +58,7 @@ export async function PATCH(req: Request) {
     }
     if (photo.size > MAX_PHOTO_BYTES) {
       return NextResponse.json(
-        { error: "Passport picture is too large (max 5MB)" },
+        { error: "Passport picture is too large (max 4MB)" },
         { status: 400 },
       );
     }
