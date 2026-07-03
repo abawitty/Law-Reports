@@ -12,12 +12,14 @@ export const metadata: Metadata = {
 export default async function ImagesContentPage() {
   await requireAdmin();
 
-  const [teinKucLogo, ndcLogo, presidentPhoto, nationalLeaderPhoto] = await Promise.all([
-    getSiteImageMeta("tein-kuc-logo"),
-    getSiteImageMeta("ndc-logo"),
-    getSiteImageMeta("president-photo"),
-    getSiteImageMeta("national-leader-photo"),
-  ]);
+  const [teinKucLogo, ndcLogo, presidentPhoto, nationalLeaderPhoto, homeHeroPhoto] =
+    await Promise.all([
+      getSiteImageMeta("tein-kuc-logo"),
+      getSiteImageMeta("ndc-logo"),
+      getSiteImageMeta("president-photo"),
+      getSiteImageMeta("national-leader-photo"),
+      getSiteImageMeta("home-hero-photo"),
+    ]);
 
   return (
     <div>
@@ -63,6 +65,13 @@ export default async function ImagesContentPage() {
             nationalLeaderPhoto.exists
               ? siteImageUrl("national-leader-photo", nationalLeaderPhoto.version)
               : undefined
+          }
+        />
+        <ImageUploadField
+          imageKey="home-hero-photo"
+          label="Homepage Hero Photo (shown behind the Welcome banner)"
+          currentUrl={
+            homeHeroPhoto.exists ? siteImageUrl("home-hero-photo", homeHeroPhoto.version) : undefined
           }
         />
       </section>

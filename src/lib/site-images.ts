@@ -5,6 +5,7 @@ export const SITE_IMAGE_KEYS = [
   "ndc-logo",
   "president-photo",
   "national-leader-photo",
+  "home-hero-photo",
 ] as const;
 export type SiteImageKey = (typeof SITE_IMAGE_KEYS)[number];
 
