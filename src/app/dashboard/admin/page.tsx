@@ -35,7 +35,13 @@ export default async function AdminPage() {
       />
 
       <section className="mx-auto max-w-6xl space-y-14 px-4 py-10 sm:px-6">
-        <div>
+        <div className="flex flex-wrap gap-3">
+          <Link
+            href="/dashboard/admin/members"
+            className="inline-block rounded-md bg-brand-red px-4 py-2 text-sm font-semibold text-white hover:brightness-90"
+          >
+            View Registered Members →
+          </Link>
           <Link
             href="/dashboard/admin/content"
             className="inline-block rounded-md bg-brand-green px-4 py-2 text-sm font-semibold text-white hover:bg-brand-green-dark"

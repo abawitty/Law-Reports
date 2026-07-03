@@ -3,10 +3,38 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { registerSchema } from "@/lib/validation";
 
-export async function POST(req: Request) {
-  const body = await req.json().catch(() => null);
-  const parsed = registerSchema.safeParse(body);
+const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
+const ALLOWED_PHOTO_TYPES = new Set(["image/png", "image/jpeg", "image/webp"]);
 
+export async function POST(req: Request) {
+  const form = await req.formData().catch(() => null);
+  if (!form) {
+    return NextResponse.json({ error: "Invalid form submission" }, { status: 400 });
+  }
+
+  const raw = Object.fromEntries(
+    [
+      "email",
+      "surname",
+      "firstName",
+      "dateOfBirth",
+      "sex",
+      "occupation",
+      "faculty",
+      "program",
+      "level",
+      "studentId",
+      "constituency",
+      "hasVotersId",
+      "phone",
+      "whatsapp",
+      "signature",
+      "password",
+      "confirmPassword",
+    ].map((key) => [key, form.get(key)]),
+  );
+
+  const parsed = registerSchema.safeParse(raw);
   if (!parsed.success) {
     return NextResponse.json(
       { error: parsed.error.issues[0]?.message ?? "Invalid input" },
@@ -14,8 +42,43 @@ export async function POST(req: Request) {
     );
   }
 
-  const { fullName, studentId, email, phone, program, level, hasGhanaCard, password } =
-    parsed.data;
+  const photo = form.get("photo");
+  if (!photo || !(photo instanceof File) || photo.size === 0) {
+    return NextResponse.json({ error: "Upload a passport picture" }, { status: 400 });
+  }
+  if (!ALLOWED_PHOTO_TYPES.has(photo.type)) {
+    return NextResponse.json(
+      { error: "Passport picture must be a PNG, JPEG, or WebP image" },
+      { status: 400 },
+    );
+  }
+  if (photo.size > MAX_PHOTO_BYTES) {
+    return NextResponse.json({ error: "Passport picture is too large (max 5MB)" }, { status: 400 });
+  }
+
+  const {
+    email,
+    surname,
+    firstName,
+    dateOfBirth,
+    sex,
+    occupation,
+    faculty,
+    program,
+    level,
+    studentId,
+    constituency,
+    hasVotersId,
+    phone,
+    whatsapp,
+    signature,
+    password,
+  } = parsed.data;
+
+  const parsedDob = new Date(dateOfBirth);
+  if (Number.isNaN(parsedDob.getTime())) {
+    return NextResponse.json({ error: "Enter a valid date of birth" }, { status: 400 });
+  }
 
   const existing = await prisma.user.findFirst({
     where: { OR: [{ studentId }, { email }] },
@@ -33,17 +96,33 @@ export async function POST(req: Request) {
   }
 
   const passwordHash = await bcrypt.hash(password, 10);
+  const photoBytes = Buffer.from(await photo.arrayBuffer());
 
   await prisma.user.create({
     data: {
-      fullName,
+      fullName: `${firstName} ${surname}`,
+      surname,
+      firstName,
       studentId,
       email,
-      phone: phone || null,
-      program: program || null,
-      level: level || null,
-      hasGhanaCard: hasGhanaCard ?? false,
+      phone,
+      whatsapp,
+      program,
+      level,
+      faculty,
+      occupation,
+      constituency,
+      sex,
+      dateOfBirth: parsedDob,
+      hasVotersId: hasVotersId === "Yes",
+      signature,
       passwordHash,
+      photo: {
+        create: {
+          data: photoBytes,
+          mimeType: photo.type,
+        },
+      },
     },
   });
 
