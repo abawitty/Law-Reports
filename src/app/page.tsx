@@ -41,7 +41,7 @@ export default function Home() {
             </h1>
             <p className="mt-5 max-w-xl text-lg text-white/85">
               The official portal of the Tertiary Education Institutions Network
-              at Koforidua University College, in partnership with the NDC —
+              at Kings University College, in partnership with the NDC —
               connecting students to student loans, Ghana Card support,
               membership services, and a transparent voice in decision-making.
             </p>

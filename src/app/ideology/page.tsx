@@ -20,12 +20,22 @@ export default function IdeologyPage() {
         <h2 className="text-2xl font-bold text-brand-green-dark">NDC History</h2>
         <div className="mt-4 space-y-4 text-gray-700">
           <p>
-            The National Democratic Congress (NDC) is one of Ghana&apos;s
-            major political parties, founded on the principles of social
-            democracy — equity, probity, accountability, and inclusive
-            development. As the student wing of the NDC, TEIN carries these
-            values onto campus, translating national ideals into practical
-            support for students.
+            The National Democratic Congress (NDC) was founded on 28 July
+            1992 by former Head of State Jerry John Rawlings, as Ghana
+            transitioned from military rule under the Provisional National
+            Defence Council (PNDC) to multi-party democracy. The party traces
+            its roots to the 4 June 1979 Uprising and the 31 December 1981
+            Revolution, events that set the tone for transparency,
+            accountability, probity, and social justice in Ghanaian
+            governance.
+          </p>
+          <p>
+            The NDC went on to win the 1992 and 1996 elections under
+            Rawlings, and has since alternated in and out of government as
+            one of Ghana&apos;s two dominant political parties. As the
+            student wing of the NDC, TEIN carries the party&apos;s founding
+            values onto campus, translating them into practical support for
+            students.
           </p>
           <p>
             TEIN-KUC continues this tradition locally, mobilising students
@@ -38,7 +48,21 @@ export default function IdeologyPage() {
         <h2 className="mt-12 text-2xl font-bold text-brand-green-dark">
           Governance Philosophy
         </h2>
-        <div className="mt-4 grid gap-5 sm:grid-cols-2">
+        <p className="mt-4 text-gray-700">
+          As a social democratic party, the NDC believes in the gradual
+          development of society on the basis of freedom, equality, and
+          solidarity — participatory democracy, responsible governance, and
+          social welfare policies that address inequality and promote
+          equitable development. Internationally, the NDC is a member of the
+          Progressive Alliance and the Socialist International. Its colours
+          are red, white, green, and black, and its motto is{" "}
+          <span className="font-semibold text-brand-green-dark">
+            &ldquo;Unity, Stability, and Development&rdquo;
+          </span>{" "}
+          — the same principle TEIN-KUC applies to student governance on
+          campus.
+        </p>
+        <div className="mt-6 grid gap-5 sm:grid-cols-2">
           {[
             {
               title: "Transparency",
@@ -69,9 +93,19 @@ export default function IdeologyPage() {
         </h2>
         <div className="mt-4 rounded-xl border border-dashed border-black/15 bg-gray-50 p-6 text-sm text-gray-600">
           <p>
-            The full TEIN-KUC &amp; NDC manifesto and policy documents will be
-            linked here once published by the executive team. Members can
-            request the latest manifesto via the{" "}
+            The NDC&apos;s national manifesto and policy documents are
+            published on the party&apos;s official website,{" "}
+            <a
+              href="https://ndc.org.gh/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-brand-green hover:underline"
+            >
+              ndc.org.gh
+            </a>
+            . TEIN-KUC &amp; NDC&apos;s own chapter manifesto and policy
+            priorities will be linked here once published by the executive
+            team. Members can request the latest documents via the{" "}
             <a href="/contact" className="font-semibold text-brand-green hover:underline">
               Contact
             </a>{" "}

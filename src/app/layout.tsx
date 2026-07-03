@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     template: "%s | TEIN-KUC & NDC",
   },
   description:
-    "Official portal of TEIN-KUC & NDC: membership, elections, student loan and Ghana Card guidance for students of Koforidua University College.",
+    "Official portal of TEIN-KUC & NDC: membership, elections, student loan and Ghana Card guidance for students of Kings University College.",
 };
 
 export default async function RootLayout({

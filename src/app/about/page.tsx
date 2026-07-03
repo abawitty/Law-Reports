@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 const EXECUTIVES = [
-  { role: "President", name: "To Be Announced" },
+  { role: "President", name: "Addo Benjamin Armah" },
   { role: "Vice President", name: "To Be Announced" },
   { role: "General Secretary", name: "To Be Announced" },
   { role: "Financial Secretary", name: "To Be Announced" },
@@ -34,7 +34,7 @@ export default function AboutPage() {
             The Tertiary Education Institutions Network (TEIN) is the student
             wing of the National Democratic Congress (NDC), established to
             organise and represent students within Ghana&apos;s tertiary
-            institutions. The TEIN-KUC chapter serves students of Koforidua
+            institutions. The TEIN-KUC chapter serves students of Kings
             University College, championing student welfare, access to
             education, and civic participation.
           </p>
@@ -88,15 +88,53 @@ export default function AboutPage() {
         </h2>
         <div className="mt-6 flex flex-col gap-6 sm:flex-row sm:items-start">
           <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-full bg-brand-green/10 text-2xl font-bold text-brand-green-dark">
-            TK
+            AA
           </div>
           <div>
-            <h3 className="font-semibold text-gray-900">President — To Be Announced</h3>
-            <p className="mt-2 text-sm text-gray-600">
-              The President&apos;s biography, academic background, and vision
-              for TEIN-KUC &amp; NDC will be published here once submitted by
-              the executive office.
-            </p>
+            <h3 className="font-semibold text-gray-900">
+              Addo Benjamin Armah — President
+            </h3>
+            <div className="mt-2 space-y-3 text-sm text-gray-600">
+              <p>
+                Addo Benjamin Armah leads TEIN-KUC &amp; NDC as President,
+                bringing a background in law, student governance, and
+                organisational leadership to the role. He holds a Bachelor of
+                Laws (LLB) from Kings University College and is currently
+                pursuing a Master of Laws (LLM) in International Law,
+                Security &amp; Diplomacy at the University of Gold Coast.
+              </p>
+              <p>
+                Within Kings University College&apos;s own student
+                government, he currently serves as Legal Affairs Commissioner
+                &amp; Chief Legal Counsel to the SRC — chairing the Legal
+                Affairs Commission, representing the Executive, Parliamentary,
+                and Judicial Councils at judicial hearings, and providing
+                legal defence services to students before the Disciplinary
+                Board. He previously served as Vice President of the Law
+                Students&apos; Union, where he spearheaded the LSU website
+                and the Dr. Attakora Legal Tree to widen student access to
+                legal resources, and coached the LSU delegation to the Sarah
+                F. Kpodo International Moot Court Competition.
+              </p>
+              <p>
+                His leadership extends beyond campus: he is President of the
+                University Student Chamber Ghana and Chairman of the
+                University Student Chamber&apos;s West African Committee,
+                representing Ghanaian students in national and international
+                forums and coordinating the annual West African Student
+                Leadership Summit. He also serves as Company Secretary &amp;
+                Administrator for several organisations, and as President of
+                the Adom Community League, a community development and
+                advocacy group in the Greater Accra Region.
+              </p>
+              <p>
+                Addo brings this record of legal advocacy, constitutional
+                governance, and community organising to TEIN-KUC &amp; NDC —
+                with a particular focus on strengthening students&apos;
+                access to information, due process, and a transparent voice
+                in decisions that affect them.
+              </p>
+            </div>
           </div>
         </div>
       </section>
