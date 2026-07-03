@@ -88,14 +88,15 @@ export function MemberImportForm() {
       <div className="rounded-xl border border-black/10 p-5">
         <h3 className="font-semibold text-gray-900">1. Download the CSV template</h3>
         <p className="mt-1 text-sm text-gray-600">
-          Fill in one row per member. <strong>surname</strong> and <strong>firstName</strong> are
-          always required, plus at least one of <strong>studentId</strong> or{" "}
-          <strong>membershipNumber</strong> — leave everything else blank if unknown (this covers
-          older records that only have a name and membership number, with no student ID or
-          email on file yet). If a row has no studentId, the membership number is used as the
-          login ID instead. If a member already has an official <strong>membershipNumber</strong>,
-          include it and it will be kept as-is; leave it blank for members who don&apos;t have one
-          yet.
+          Fill in one row per member — nothing is required, so a row with just a membership
+          number and a name will still be imported. If a row has no <strong>studentId</strong>,
+          the <strong>membershipNumber</strong> is used as the login ID instead; if it has
+          neither, a placeholder login ID (e.g. <em>PENDING-12-a1b2c3d4</em>) is generated so the
+          account still gets created. Rows with no name are labelled &quot;Unnamed Member&quot; —
+          you (or the member) can fill in the missing details later. Only completely blank rows
+          and exact duplicates (same Member ID, email, or membership number as an existing
+          account) are skipped. If a member already has an official{" "}
+          <strong>membershipNumber</strong>, include it and it will be kept as-is.
         </p>
         <button
           type="button"
@@ -159,7 +160,7 @@ export function MemberImportForm() {
             <table className="min-w-full divide-y divide-black/10 text-sm">
               <thead className="bg-gray-50">
                 <tr>
-                  {["Row", "Student ID", "Name", "Email", "Status", "Initial Password / Reason"].map(
+                  {["Row", "Member ID", "Name", "Email", "Status", "Initial Password / Reason"].map(
                     (h) => (
                       <th
                         key={h}

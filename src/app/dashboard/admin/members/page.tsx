@@ -61,7 +61,7 @@ export default async function MembersPage() {
                     "Name",
                     "Membership No.",
                     "Status",
-                    "Student ID",
+                    "Member ID",
                     "Email",
                     "Phone",
                     "WhatsApp",

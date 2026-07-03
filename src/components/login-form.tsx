@@ -25,7 +25,7 @@ export function LoginForm() {
     });
 
     if (result?.error) {
-      setError("Invalid Student ID or password.");
+      setError("Invalid Member ID or password.");
       setLoading(false);
       return;
     }
@@ -49,7 +49,7 @@ export function LoginForm() {
 
       <div>
         <label htmlFor="studentId" className="block text-sm font-medium text-gray-700">
-          Student ID
+          Member ID
         </label>
         <input
           id="studentId"
@@ -58,6 +58,9 @@ export function LoginForm() {
           autoFocus
           className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-brand-green focus:outline-none focus:ring-1 focus:ring-brand-green"
         />
+        <p className="mt-1 text-xs text-gray-500">
+          Your Student ID or Membership Number, whichever you registered with.
+        </p>
       </div>
 
       <div>
