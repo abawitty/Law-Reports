@@ -29,21 +29,12 @@ export function Logo({
             <img src={images.ndcLogoUrl} alt="NDC logo" className="h-9 w-9 object-contain" />
           )}
         </span>
-        <span className="leading-tight">
-          <span
-            className={`block text-[15px] font-bold tracking-tight ${
-              onDark ? "text-white" : "text-brand-green-dark"
-            }`}
-          >
-            TEIN-KUC
-          </span>
-          <span
-            className={`block text-[11px] font-medium -mt-0.5 ${
-              onDark ? "text-white" : "text-brand-red"
-            }`}
-          >
-            &amp; NDC
-          </span>
+        <span
+          className={`text-[15px] font-bold tracking-tight ${
+            onDark ? "text-white" : "text-brand-green-dark"
+          }`}
+        >
+          TEIN-KUC
         </span>
       </div>
     );
@@ -77,21 +68,12 @@ export function Logo({
           KUC
         </text>
       </svg>
-      <span className="leading-tight">
-        <span
-          className={`block text-[15px] font-bold tracking-tight ${
-            onDark ? "text-white" : "text-brand-green-dark"
-          }`}
-        >
-          TEIN-KUC
-        </span>
-        <span
-          className={`block text-[11px] font-medium -mt-0.5 ${
-            onDark ? "text-white" : "text-brand-red"
-          }`}
-        >
-          &amp; NDC
-        </span>
+      <span
+        className={`text-[15px] font-bold tracking-tight ${
+          onDark ? "text-white" : "text-brand-green-dark"
+        }`}
+      >
+        TEIN-KUC
       </span>
     </div>
   );
