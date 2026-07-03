@@ -32,6 +32,19 @@ export type AboutContent = {
   presidentBioParagraphs: string[];
 };
 
+export type MembershipContent = {
+  heroTitle: string;
+  heroDescription: string;
+  newMemberTitle: string;
+  newMemberBody: string;
+  existingMemberTitle: string;
+  existingMemberBody: string;
+  features: TitleBody[];
+  typesIntro: string;
+  membershipTypes: TitleBody[];
+  constitutionIntro: string;
+};
+
 export type IdeologyContent = {
   heroTitle: string;
   heroDescription: string;
@@ -131,6 +144,51 @@ export const ABOUT_DEFAULTS: AboutContent = {
     "His leadership extends beyond campus: he is President of the University Student Chamber Ghana and Chairman of the University Student Chamber's West African Committee, representing Ghanaian students in national and international forums and coordinating the annual West African Student Leadership Summit. He also serves as Company Secretary & Administrator for several organisations, and as President of the Adom Community League, a community development and advocacy group in the Greater Accra Region.",
     "Addo brings this record of legal advocacy, constitutional governance, and community organising to TEIN-KUC & NDC — with a particular focus on strengthening students' access to information, due process, and a transparent voice in decisions that affect them.",
   ],
+};
+
+export const MEMBERSHIP_DEFAULTS: MembershipContent = {
+  heroTitle: "Join & Access the Member Portal",
+  heroDescription:
+    "Register your details once, then log in anytime to vote in elections, view your data, and reach the executives directly.",
+  newMemberTitle: "New Member",
+  newMemberBody:
+    "Register with your student details to create your account in the member database.",
+  existingMemberTitle: "Existing Member",
+  existingMemberBody:
+    "Log in to the member database to view your profile, vote, and submit requests.",
+  features: [
+    { title: "Your Data", body: "View and keep your membership details up to date." },
+    {
+      title: "Online Elections",
+      body: "Vote securely in scheduled elections for TEIN-KUC executives.",
+    },
+    {
+      title: "Requests & Suggestions",
+      body: "Submit queries or suggestions and track responses from leadership.",
+    },
+  ],
+  typesIntro:
+    "TEIN-KUC's constitution recognises four types of membership, set out in Article 3.",
+  membershipTypes: [
+    {
+      title: "Full Membership",
+      body: "Open to every student at Kings University College, regardless of ethnicity, origin, religion, or background. Each full member has one vote at TEIN-KUC elections and General Assemblies, must not belong to any other political party, and must remain in good standing.",
+    },
+    {
+      title: "Associate Membership",
+      body: "For individuals and groups who are not NDC members but support TEIN-KUC's objectives or provide financial, moral, or in-kind support — as well as full members who graduate and wish to stay involved. Associate members have speaking rights at General Assemblies but no voting rights.",
+    },
+    {
+      title: "Honorary Membership",
+      body: "Conferred by the Executive Council, subject to Executive Committee approval, on NDC members who have remarkably advanced the cause of TEIN-KUC. Honorary members have speaking rights at General Assemblies but no voting rights.",
+    },
+    {
+      title: "Patron",
+      body: "There are three Patrons at a time — the Regional TEIN Coordinator and the Constituency Youth Organiser by default, plus one university lecturer or administrator. Patrons play an advisory role and hold Honorary Membership.",
+    },
+  ],
+  constitutionIntro:
+    "The full TEIN-KUC Constitution — covering membership, executive structure, elections, finance, and discipline — is available to read or download below.",
 };
 
 export const IDEOLOGY_DEFAULTS: IdeologyContent = {
@@ -247,10 +305,18 @@ export const CONTACT_DEFAULTS: ContactContent = {
 export const PAGE_DEFAULTS = {
   home: HOME_DEFAULTS,
   about: ABOUT_DEFAULTS,
+  membership: MEMBERSHIP_DEFAULTS,
   ideology: IDEOLOGY_DEFAULTS,
   resources: RESOURCES_DEFAULTS,
   contact: CONTACT_DEFAULTS,
 } as const;
 
 export type PageSlug = keyof typeof PAGE_DEFAULTS;
-export const PAGE_SLUGS: PageSlug[] = ["home", "about", "ideology", "resources", "contact"];
+export const PAGE_SLUGS: PageSlug[] = [
+  "home",
+  "about",
+  "membership",
+  "ideology",
+  "resources",
+  "contact",
+];

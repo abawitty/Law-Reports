@@ -7,6 +7,7 @@ import { getPageContent } from "@/lib/content";
 import { PAGE_SLUGS, type PageSlug } from "@/lib/content-defaults";
 import { HomeContentForm } from "@/components/admin/home-content-form";
 import { AboutContentForm } from "@/components/admin/about-content-form";
+import { MembershipContentForm } from "@/components/admin/membership-content-form";
 import { IdeologyContentForm } from "@/components/admin/ideology-content-form";
 import { ResourcesContentForm } from "@/components/admin/resources-content-form";
 import { ContactContentForm } from "@/components/admin/contact-content-form";
@@ -14,6 +15,7 @@ import { ContactContentForm } from "@/components/admin/contact-content-form";
 const PAGE_LABELS: Record<PageSlug, string> = {
   home: "Home",
   about: "About Us",
+  membership: "Membership",
   ideology: "Ideology",
   resources: "Resources",
   contact: "Contact",
@@ -59,6 +61,9 @@ export default async function PageContentEditor({
         <div className="mt-6">
           {slug === "home" && <HomeContentForm initial={await getPageContent("home")} />}
           {slug === "about" && <AboutContentForm initial={await getPageContent("about")} />}
+          {slug === "membership" && (
+            <MembershipContentForm initial={await getPageContent("membership")} />
+          )}
           {slug === "ideology" && (
             <IdeologyContentForm initial={await getPageContent("ideology")} />
           )}

@@ -11,6 +11,7 @@ export const metadata: Metadata = {
 const PAGE_LABELS: Record<string, string> = {
   home: "Home",
   about: "About Us",
+  membership: "Membership",
   ideology: "Ideology",
   resources: "Resources",
   contact: "Contact",

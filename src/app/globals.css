@@ -4,11 +4,10 @@
   --background: #ffffff;
   --foreground: #171717;
 
-  /* TEIN-KUC & NDC brand palette */
+  /* TEIN-KUC & NDC brand palette: red, green, white, black */
   --brand-green: #046a38;
   --brand-green-dark: #024a27;
   --brand-red: #ce1126;
-  --brand-gold: #fcd116;
 }
 
 @theme inline {
@@ -17,7 +16,6 @@
   --color-brand-green: var(--brand-green);
   --color-brand-green-dark: var(--brand-green-dark);
   --color-brand-red: var(--brand-red);
-  --color-brand-gold: var(--brand-gold);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }

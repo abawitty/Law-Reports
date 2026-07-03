@@ -53,7 +53,7 @@ export default async function DashboardPage() {
         <div className="mx-auto max-w-6xl px-4 pt-8 sm:px-6">
           <Link
             href="/dashboard/admin"
-            className="inline-block rounded-md bg-brand-gold px-4 py-2 text-sm font-semibold text-brand-green-dark hover:brightness-95"
+            className="inline-block rounded-md bg-brand-red px-4 py-2 text-sm font-semibold text-white hover:brightness-90"
           >
             Go to Admin Panel →
           </Link>
