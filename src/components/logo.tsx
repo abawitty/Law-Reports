@@ -39,7 +39,7 @@ export function Logo({
           </span>
           <span
             className={`block text-[11px] font-medium -mt-0.5 ${
-              onDark ? "text-brand-gold" : "text-brand-red"
+              onDark ? "text-white" : "text-brand-red"
             }`}
           >
             &amp; NDC
@@ -60,10 +60,10 @@ export function Logo({
         aria-hidden="true"
         className="shrink-0"
       >
-        <circle cx="20" cy="20" r="19" fill="#046A38" stroke="#FCD116" strokeWidth="2" />
+        <circle cx="20" cy="20" r="19" fill="#046A38" stroke="#FFFFFF" strokeWidth="2" />
         <path
           d="M20 8l2.3 6.9h7.3l-5.9 4.3 2.3 6.9-5.9-4.3-5.9 4.3 2.3-6.9-5.9-4.3h7.3L20 8z"
-          fill="#FCD116"
+          fill="#FFFFFF"
         />
         <text
           x="20"
@@ -87,7 +87,7 @@ export function Logo({
         </span>
         <span
           className={`block text-[11px] font-medium -mt-0.5 ${
-            onDark ? "text-brand-gold" : "text-brand-red"
+            onDark ? "text-white" : "text-brand-red"
           }`}
         >
           &amp; NDC

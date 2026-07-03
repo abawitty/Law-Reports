@@ -30,6 +30,19 @@ export const aboutContentSchema = z.object({
   presidentBioParagraphs: z.array(z.string()),
 });
 
+export const membershipContentSchema = z.object({
+  heroTitle: z.string(),
+  heroDescription: z.string(),
+  newMemberTitle: z.string(),
+  newMemberBody: z.string(),
+  existingMemberTitle: z.string(),
+  existingMemberBody: z.string(),
+  features: z.array(titleBody),
+  typesIntro: z.string(),
+  membershipTypes: z.array(titleBody),
+  constitutionIntro: z.string(),
+});
+
 export const ideologyContentSchema = z.object({
   heroTitle: z.string(),
   heroDescription: z.string(),
@@ -66,6 +79,7 @@ export const contactContentSchema = z.object({
 export const CONTENT_SCHEMAS = {
   home: homeContentSchema,
   about: aboutContentSchema,
+  membership: membershipContentSchema,
   ideology: ideologyContentSchema,
   resources: resourcesContentSchema,
   contact: contactContentSchema,

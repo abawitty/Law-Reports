@@ -9,7 +9,7 @@ export default async function Home() {
       <section className="relative overflow-hidden bg-gradient-to-br from-brand-green-dark via-brand-green to-brand-green-dark text-white">
         <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:px-6 sm:py-24 lg:grid-cols-2 lg:items-center">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-widest text-brand-gold">
+            <p className="text-sm font-semibold uppercase tracking-widest text-white">
               {content.heroEyebrow}
             </p>
             <h1 className="mt-2 text-4xl font-extrabold tracking-tight sm:text-5xl">
@@ -19,7 +19,7 @@ export default async function Home() {
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href="/membership/register"
-                className="rounded-md bg-brand-gold px-5 py-3 text-sm font-semibold text-brand-green-dark shadow-sm hover:brightness-95"
+                className="rounded-md bg-white px-5 py-3 text-sm font-semibold text-brand-green-dark shadow-sm hover:bg-white/90"
               >
                 Become a Member
               </Link>
@@ -33,7 +33,7 @@ export default async function Home() {
           </div>
 
           <div className="rounded-2xl border border-white/15 bg-white/10 p-6 backdrop-blur">
-            <h2 className="text-lg font-semibold text-brand-gold">{content.heroPanelTitle}</h2>
+            <h2 className="text-lg font-semibold text-white">{content.heroPanelTitle}</h2>
             <ul className="mt-4 space-y-3 text-sm text-white/90">
               {content.heroPanelItems.map((item, i) => (
                 <li key={i} className="flex gap-2">
