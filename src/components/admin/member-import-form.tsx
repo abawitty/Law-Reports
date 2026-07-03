@@ -7,7 +7,7 @@ type ImportResult = {
   row: number;
   studentId: string;
   fullName: string;
-  email: string;
+  email: string | null;
   status: "created" | "skipped";
   reason?: string;
   initialPassword?: string;
@@ -17,6 +17,7 @@ const TEMPLATE_HEADER =
   "studentId,membershipNumber,surname,firstName,email,phone,whatsapp,program,level,faculty,occupation,constituency,sex,dateOfBirth,hasVotersId,hasGhanaCard";
 const TEMPLATE_EXAMPLE =
   "20230001,TEIN-0001,Mensah,Ama,ama.mensah@example.com,0244000111,0244000111,BSc Computer Science,200,Faculty of Science,Student,Ablekuma North,Female,2000-05-15,Yes,No";
+const TEMPLATE_EXAMPLE_2 = ",T00099KUC25,Owusu,Kwame,,,,,,,,,,,,";
 
 function downloadBlob(filename: string, content: string, type: string) {
   const blob = new Blob([content], { type });
@@ -35,7 +36,7 @@ function resultsToCsv(results: ImportResult[]): string {
       r.row,
       r.studentId,
       r.fullName,
-      r.email,
+      r.email ?? "",
       r.status,
       r.initialPassword ?? "",
       r.reason ?? "",
@@ -87,18 +88,21 @@ export function MemberImportForm() {
       <div className="rounded-xl border border-black/10 p-5">
         <h3 className="font-semibold text-gray-900">1. Download the CSV template</h3>
         <p className="mt-1 text-sm text-gray-600">
-          Fill in one row per member. Only <strong>studentId</strong>, <strong>surname</strong>,{" "}
-          <strong>firstName</strong>, and <strong>email</strong> are required — leave other
-          columns blank if unknown. If a member already has an official{" "}
-          <strong>membershipNumber</strong>, include it and it will be kept as-is; leave it blank
-          for members who don&apos;t have one yet.
+          Fill in one row per member. <strong>surname</strong> and <strong>firstName</strong> are
+          always required, plus at least one of <strong>studentId</strong> or{" "}
+          <strong>membershipNumber</strong> — leave everything else blank if unknown (this covers
+          older records that only have a name and membership number, with no student ID or
+          email on file yet). If a row has no studentId, the membership number is used as the
+          login ID instead. If a member already has an official <strong>membershipNumber</strong>,
+          include it and it will be kept as-is; leave it blank for members who don&apos;t have one
+          yet.
         </p>
         <button
           type="button"
           onClick={() =>
             downloadBlob(
               "teinkuc-members-template.csv",
-              `${TEMPLATE_HEADER}\n${TEMPLATE_EXAMPLE}\n`,
+              `${TEMPLATE_HEADER}\n${TEMPLATE_EXAMPLE}\n${TEMPLATE_EXAMPLE_2}\n`,
               "text/csv",
             )
           }
@@ -173,7 +177,7 @@ export function MemberImportForm() {
                     <td className="whitespace-nowrap px-3 py-2 text-gray-600">{r.row}</td>
                     <td className="whitespace-nowrap px-3 py-2 text-gray-600">{r.studentId}</td>
                     <td className="whitespace-nowrap px-3 py-2 text-gray-900">{r.fullName}</td>
-                    <td className="whitespace-nowrap px-3 py-2 text-gray-600">{r.email}</td>
+                    <td className="whitespace-nowrap px-3 py-2 text-gray-600">{r.email || "—"}</td>
                     <td className="whitespace-nowrap px-3 py-2">
                       <span
                         className={`rounded-full px-2 py-0.5 text-xs font-semibold ${

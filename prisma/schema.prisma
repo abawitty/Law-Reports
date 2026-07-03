@@ -21,7 +21,7 @@ model User {
   studentId          String    @unique
   membershipNumber   String?   @unique
   approvalStatus     String    @default("APPROVED")
-  email              String    @unique
+  email              String?   @unique
   phone              String?
   whatsapp           String?
   program            String?
