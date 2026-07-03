@@ -10,15 +10,18 @@ online elections, and submitting queries/suggestions/requests to leadership.
 
 - [Next.js](https://nextjs.org) (App Router) + TypeScript
 - Tailwind CSS v4
-- Prisma ORM + SQLite (swap the `DATABASE_URL` in `.env` for Postgres/MySQL in production)
+- Prisma ORM + PostgreSQL
 - Auth.js (NextAuth v5) with credentials (Student ID + password) login
 
 ## Getting Started
 
+You need a PostgreSQL database — a local instance, or a free hosted one
+(e.g. [Neon](https://neon.tech) or [Supabase](https://supabase.com)).
+
 ```bash
 npm install
-cp .env.example .env        # set AUTH_SECRET (openssl rand -base64 32)
-npx prisma migrate dev      # creates the SQLite database
+cp .env.example .env        # set DATABASE_URL and AUTH_SECRET (openssl rand -base64 32)
+npx prisma migrate deploy   # applies the schema to your database
 npm run db:seed             # creates an admin account + a sample election
 npm run dev
 ```
@@ -32,6 +35,17 @@ The seed script creates an admin login:
 
 Override these via `SEED_ADMIN_STUDENT_ID` / `SEED_ADMIN_PASSWORD` env vars
 before seeding, and change the password after first login in production.
+
+## Deploying to Vercel
+
+1. Create a Postgres database (Vercel Postgres, Neon, or Supabase all work)
+   and copy its connection string.
+2. Import this repository into Vercel and set two environment variables:
+   `DATABASE_URL` (the connection string) and `AUTH_SECRET` (`openssl rand
+   -base64 32`).
+3. After the first deploy, run once against that database:
+   `DATABASE_URL="..." npx prisma migrate deploy` and
+   `DATABASE_URL="..." npm run db:seed`.
 
 ## Site Structure
 
@@ -49,8 +63,8 @@ before seeding, and change the password after first login in production.
 ## Notes
 
 - Roles (`MEMBER`, `EXECUTIVE`, `ADMIN`) and other enum-like fields are
-  plain strings in the schema because SQLite has no native enum type;
-  allowed values live in `src/lib/constants.ts`.
+  plain strings in the schema for portability; allowed values live in
+  `src/lib/constants.ts`.
 - Votes are unique per member per position (`@@unique([userId, positionId])`
   on `Vote`), enforced both at the database level and in the `/api/vote`
   route.
