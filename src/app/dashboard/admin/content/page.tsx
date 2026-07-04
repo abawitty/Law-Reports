@@ -54,6 +54,17 @@ export default async function ContentIndexPage() {
               Upload the TEIN-KUC logo, NDC logo, and President&apos;s photo.
             </p>
           </Link>
+
+          <Link
+            href="/dashboard/admin/content/pages"
+            className="rounded-xl border border-black/10 bg-brand-green/5 p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+          >
+            <h3 className="font-semibold text-brand-green-dark">Custom Pages</h3>
+            <p className="mt-1 text-sm text-gray-600">
+              Build brand new pages freehand — headings, text, images, and buttons, arranged
+              however you like.
+            </p>
+          </Link>
         </div>
       </section>
     </div>
