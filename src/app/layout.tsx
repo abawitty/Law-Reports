@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { AuthSessionProvider } from "@/components/session-provider";
 import { getSiteImageMeta, siteImageUrl } from "@/lib/site-images";
+import { prisma } from "@/lib/prisma";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,11 +32,18 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [session, teinKucLogo, ndcLogo] = await Promise.all([
+  const [session, teinKucLogo, ndcLogo, customPages] = await Promise.all([
     auth(),
     getSiteImageMeta("tein-kuc-logo"),
     getSiteImageMeta("ndc-logo"),
+    prisma.customPage.findMany({
+      where: { published: true },
+      orderBy: { navOrder: "asc" },
+      select: { slug: true, navLabel: true, navOrder: true },
+    }),
   ]);
+
+  const customNavLinks = customPages.map((p) => ({ href: `/p/${p.slug}`, label: p.navLabel }));
 
   const logoImages = {
     teinKucLogoUrl: teinKucLogo.exists
@@ -58,6 +66,7 @@ export default async function RootLayout({
                 : null
             }
             logoImages={logoImages}
+            customNavLinks={customNavLinks}
           />
           <main className="flex-1">{children}</main>
           <SiteFooter logoImages={logoImages} />

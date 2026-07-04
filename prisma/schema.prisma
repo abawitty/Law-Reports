@@ -145,3 +145,29 @@ model GalleryPhoto {
   mimeType  String
   createdAt DateTime @default(now())
 }
+
+// A page built freehand by an admin out of ordered content blocks (see
+// src/lib/blocks.ts for the block shapes). Rendered at /p/[slug] and listed
+// in the site nav when published, ordered by navOrder. Separate from the
+// six built-in pages (Home, About, etc.), whose curated layouts are still
+// hand-coded and only text/image-edited through PageContent/SiteImage.
+model CustomPage {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  title     String
+  navLabel  String
+  navOrder  Int      @default(0)
+  published Boolean  @default(false)
+  blocks    Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// An image embedded inside a CustomPage's blocks, stored the same way as
+// SiteImage/GalleryPhoto. Served via /api/page-image/[id].
+model PageBlockImage {
+  id        String   @id @default(cuid())
+  data      Bytes
+  mimeType  String
+  createdAt DateTime @default(now())
+}

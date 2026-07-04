@@ -19,12 +19,15 @@ const NAV_LINKS = [
 export function SiteHeader({
   session,
   logoImages,
+  customNavLinks = [],
 }: {
   session: { fullName: string; role: string } | null;
   logoImages?: { teinKucLogoUrl?: string; ndcLogoUrl?: string };
+  customNavLinks?: { href: string; label: string }[];
 }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const navLinks = [...NAV_LINKS, ...customNavLinks];
 
   return (
     <header className="sticky top-0 z-50 border-b border-black/10 bg-white/95 backdrop-blur">
@@ -34,7 +37,7 @@ export function SiteHeader({
         </Link>
 
         <nav className="hidden lg:flex lg:items-center lg:gap-1">
-          {NAV_LINKS.map((link) => {
+          {navLinks.map((link) => {
             const active =
               link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
             return (
@@ -107,7 +110,7 @@ export function SiteHeader({
       {open && (
         <div className="border-t border-black/10 bg-white px-4 py-3 lg:hidden">
           <nav className="flex flex-col gap-1">
-            {NAV_LINKS.map((link) => (
+            {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
