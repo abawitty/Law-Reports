@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { PageHero } from "@/components/page-hero";
 import { ResetPasswordButton } from "@/components/admin/reset-password-button";
 import { ApproveMemberButton } from "@/components/admin/approve-member-button";
+import { ResendApprovalEmailButton } from "@/components/admin/resend-approval-email-button";
 
 export const metadata: Metadata = {
   title: "Members",
@@ -74,7 +75,7 @@ export default async function MembersPage() {
                     "Sex",
                     "Role",
                     "Registered",
-                    "Password",
+                    "Actions",
                   ].map((h) => (
                     <th
                       key={h}
@@ -152,7 +153,12 @@ export default async function MembersPage() {
                       {new Date(m.createdAt).toLocaleDateString()}
                     </td>
                     <td className="whitespace-nowrap px-3 py-2">
-                      <ResetPasswordButton userId={m.id} />
+                      <div className="flex flex-col gap-1.5">
+                        <ResetPasswordButton userId={m.id} />
+                        {m.membershipNumber && m.email && (
+                          <ResendApprovalEmailButton userId={m.id} />
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))}
