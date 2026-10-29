@@ -15,6 +15,11 @@ const PAGE_LABELS: Record<string, string> = {
   ideology: "Ideology",
   resources: "Resources",
   contact: "Contact",
+  emails: "Member Emails",
+};
+
+const PAGE_DESCRIPTIONS: Record<string, string> = {
+  emails: "Edit the subject and wording of the automatic approval and account-created emails.",
 };
 
 export default async function ContentIndexPage() {
@@ -40,8 +45,13 @@ export default async function ContentIndexPage() {
               href={`/dashboard/admin/content/${slug}`}
               className="rounded-xl border border-black/10 p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
             >
-              <h3 className="font-semibold text-brand-green-dark">{PAGE_LABELS[slug]} page</h3>
-              <p className="mt-1 text-sm text-gray-600">Edit the text on this page.</p>
+              <h3 className="font-semibold text-brand-green-dark">
+                {PAGE_LABELS[slug]}
+                {slug !== "emails" && " page"}
+              </h3>
+              <p className="mt-1 text-sm text-gray-600">
+                {PAGE_DESCRIPTIONS[slug] ?? "Edit the text on this page."}
+              </p>
             </Link>
           ))}
 

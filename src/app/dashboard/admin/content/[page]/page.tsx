@@ -11,6 +11,7 @@ import { MembershipContentForm } from "@/components/admin/membership-content-for
 import { IdeologyContentForm } from "@/components/admin/ideology-content-form";
 import { ResourcesContentForm } from "@/components/admin/resources-content-form";
 import { ContactContentForm } from "@/components/admin/contact-content-form";
+import { EmailContentForm } from "@/components/admin/email-content-form";
 
 const PAGE_LABELS: Record<PageSlug, string> = {
   home: "Home",
@@ -19,6 +20,7 @@ const PAGE_LABELS: Record<PageSlug, string> = {
   ideology: "Ideology",
   resources: "Resources",
   contact: "Contact",
+  emails: "Member Emails",
 };
 
 export async function generateMetadata({
@@ -71,6 +73,7 @@ export default async function PageContentEditor({
             <ResourcesContentForm initial={await getPageContent("resources")} />
           )}
           {slug === "contact" && <ContactContentForm initial={await getPageContent("contact")} />}
+          {slug === "emails" && <EmailContentForm initial={await getPageContent("emails")} />}
         </div>
       </section>
     </div>

@@ -5,6 +5,7 @@ import { getAdminSession } from "@/lib/api-auth";
 import { generateTempPassword } from "@/lib/generate-password";
 import { sendEmail, loginUrl } from "@/lib/email";
 import { importWelcomeEmail } from "@/lib/email-templates";
+import { getPageContent } from "@/lib/content";
 
 export async function POST(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const check = await getAdminSession();
@@ -28,7 +29,9 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
 
   let emailed = false;
   if (user.email) {
+    const emailContent = await getPageContent("emails");
     const { subject, html } = importWelcomeEmail(
+      emailContent,
       user.fullName,
       user.studentId,
       user.membershipNumber,
