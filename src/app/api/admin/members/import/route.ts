@@ -6,6 +6,8 @@ import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { getAdminSession } from "@/lib/api-auth";
 import { generateTempPassword } from "@/lib/generate-password";
+import { sendEmail, loginUrl } from "@/lib/email";
+import { importWelcomeEmail } from "@/lib/email-templates";
 
 // Bulk imports can involve hundreds of rows; give the route more room than
 // the framework default before Vercel considers it timed out.
@@ -240,6 +242,26 @@ export async function POST(req: Request) {
       skipDuplicates: true,
     });
   }
+
+  // Email login details to every newly created member who has an email on
+  // file. Most historical rows don't have one, so this only reaches a
+  // handful per import — failures here never affect which rows were
+  // created, only whether the member was notified.
+  const url = loginUrl();
+  await Promise.allSettled(
+    toCreate
+      .filter((item) => item.data.email)
+      .map((item) => {
+        const { subject, html } = importWelcomeEmail(
+          item.data.fullName,
+          item.row.studentId,
+          item.data.membershipNumber ?? null,
+          item.row.initialPassword!,
+          url,
+        );
+        return sendEmail({ to: item.data.email!, subject, html });
+      }),
+  );
 
   for (const item of toCreate) results.push(item.row);
   results.sort((a, b) => a.row - b.row);

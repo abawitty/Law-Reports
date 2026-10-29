@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getAdminSession } from "@/lib/api-auth";
 import { computeNextMembershipNumber } from "@/lib/membership-number";
+import { sendEmail, loginUrl } from "@/lib/email";
+import { approvalEmail } from "@/lib/email-templates";
 
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const check = await getAdminSession();
@@ -38,6 +40,11 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     where: { id },
     data: { membershipNumber, approvalStatus: "APPROVED" },
   });
+
+  if (user.email) {
+    const { subject, html } = approvalEmail(user.fullName, membershipNumber, loginUrl());
+    await sendEmail({ to: user.email, subject, html });
+  }
 
   return NextResponse.json({ ok: true, membershipNumber });
 }
