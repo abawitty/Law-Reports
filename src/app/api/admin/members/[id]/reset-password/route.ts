@@ -3,6 +3,8 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { getAdminSession } from "@/lib/api-auth";
 import { generateTempPassword } from "@/lib/generate-password";
+import { sendEmail, loginUrl } from "@/lib/email";
+import { importWelcomeEmail } from "@/lib/email-templates";
 
 export async function POST(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const check = await getAdminSession();
@@ -24,5 +26,18 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
     data: { passwordHash, mustChangePassword: true },
   });
 
-  return NextResponse.json({ ok: true, newPassword });
+  let emailed = false;
+  if (user.email) {
+    const { subject, html } = importWelcomeEmail(
+      user.fullName,
+      user.studentId,
+      user.membershipNumber,
+      newPassword,
+      loginUrl(),
+    );
+    const result = await sendEmail({ to: user.email, subject, html });
+    emailed = result.sent;
+  }
+
+  return NextResponse.json({ ok: true, newPassword, emailed });
 }
