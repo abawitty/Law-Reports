@@ -78,6 +78,15 @@ export const contactContentSchema = z.object({
   memberNote: z.string(),
 });
 
+export const emailContentSchema = z.object({
+  approvalSubject: z.string().min(1),
+  approvalIntro: z.string(),
+  approvalClosing: z.string(),
+  welcomeSubject: z.string().min(1),
+  welcomeIntro: z.string(),
+  welcomeClosing: z.string(),
+});
+
 export const CONTENT_SCHEMAS = {
   home: homeContentSchema,
   about: aboutContentSchema,
@@ -85,4 +94,5 @@ export const CONTENT_SCHEMAS = {
   ideology: ideologyContentSchema,
   resources: resourcesContentSchema,
   contact: contactContentSchema,
+  emails: emailContentSchema,
 } as const;

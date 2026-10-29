@@ -80,6 +80,19 @@ export type ContactContent = {
   memberNote: string;
 };
 
+// Wording for the two automatic member emails (see src/lib/email-templates.ts).
+// The greeting, membership number box, login-details table, and login link
+// are fixed in code — only these free-text lines are admin-editable, so the
+// placeholders (name, membership number, password) can't be broken by an edit.
+export type EmailContent = {
+  approvalSubject: string;
+  approvalIntro: string;
+  approvalClosing: string;
+  welcomeSubject: string;
+  welcomeIntro: string;
+  welcomeClosing: string;
+};
+
 export const HOME_DEFAULTS: HomeContent = {
   heroEyebrow: "Welcome to",
   heroTitle: "TEIN-KUC & NDC",
@@ -306,6 +319,15 @@ export const CONTACT_DEFAULTS: ContactContent = {
     "For member-specific requests, queries, or suggestions, please log in to your member dashboard so the right executive can follow up with you directly.",
 };
 
+export const EMAIL_DEFAULTS: EmailContent = {
+  approvalSubject: "Your TEIN-KUC membership application has been approved",
+  approvalIntro: "Congratulations — your TEIN-KUC membership application has been approved.",
+  approvalClosing: "Welcome to TEIN-KUC.",
+  welcomeSubject: "Your TEIN-KUC member account has been created",
+  welcomeIntro: "A TEIN-KUC member account has been created for you. Your login details are:",
+  welcomeClosing: "Welcome to TEIN-KUC.",
+};
+
 export const PAGE_DEFAULTS = {
   home: HOME_DEFAULTS,
   about: ABOUT_DEFAULTS,
@@ -313,6 +335,7 @@ export const PAGE_DEFAULTS = {
   ideology: IDEOLOGY_DEFAULTS,
   resources: RESOURCES_DEFAULTS,
   contact: CONTACT_DEFAULTS,
+  emails: EMAIL_DEFAULTS,
 } as const;
 
 export type PageSlug = keyof typeof PAGE_DEFAULTS;
@@ -323,4 +346,5 @@ export const PAGE_SLUGS: PageSlug[] = [
   "ideology",
   "resources",
   "contact",
+  "emails",
 ];

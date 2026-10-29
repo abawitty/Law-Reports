@@ -4,6 +4,7 @@ import { getAdminSession } from "@/lib/api-auth";
 import { computeNextMembershipNumber } from "@/lib/membership-number";
 import { sendEmail, loginUrl } from "@/lib/email";
 import { approvalEmail } from "@/lib/email-templates";
+import { getPageContent } from "@/lib/content";
 
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const check = await getAdminSession();
@@ -42,7 +43,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   });
 
   if (user.email) {
-    const { subject, html } = approvalEmail(user.fullName, membershipNumber, loginUrl());
+    const emailContent = await getPageContent("emails");
+    const { subject, html } = approvalEmail(emailContent, user.fullName, membershipNumber, loginUrl());
     await sendEmail({ to: user.email, subject, html });
   }
 

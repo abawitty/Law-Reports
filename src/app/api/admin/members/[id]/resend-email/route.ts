@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { getAdminSession } from "@/lib/api-auth";
 import { sendEmail, loginUrl } from "@/lib/email";
 import { approvalEmail } from "@/lib/email-templates";
+import { getPageContent } from "@/lib/content";
 
 export async function POST(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const check = await getAdminSession();
@@ -25,7 +26,8 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
     return NextResponse.json({ error: "No email on file for this member" }, { status: 400 });
   }
 
-  const { subject, html } = approvalEmail(user.fullName, user.membershipNumber, loginUrl());
+  const emailContent = await getPageContent("emails");
+  const { subject, html } = approvalEmail(emailContent, user.fullName, user.membershipNumber, loginUrl());
   const result = await sendEmail({ to: user.email, subject, html });
 
   if (!result.sent) {
