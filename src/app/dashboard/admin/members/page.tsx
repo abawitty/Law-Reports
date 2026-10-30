@@ -6,6 +6,7 @@ import { PageHero } from "@/components/page-hero";
 import { ResetPasswordButton } from "@/components/admin/reset-password-button";
 import { ApproveMemberButton } from "@/components/admin/approve-member-button";
 import { ResendApprovalEmailButton } from "@/components/admin/resend-approval-email-button";
+import { EditIssuedDateButton } from "@/components/admin/edit-issued-date-button";
 
 export const metadata: Metadata = {
   title: "Members",
@@ -166,6 +167,12 @@ export default async function MembersPage() {
                           >
                             ID Card
                           </a>
+                        )}
+                        {m.membershipNumber && (
+                          <EditIssuedDateButton
+                            userId={m.id}
+                            initialIssuedAt={m.membershipIssuedAt?.toISOString() ?? null}
+                          />
                         )}
                       </div>
                     </td>
