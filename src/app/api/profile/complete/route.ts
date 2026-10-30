@@ -21,6 +21,7 @@ export async function PATCH(req: Request) {
     [
       "surname",
       "firstName",
+      "email",
       "dateOfBirth",
       "sex",
       "occupation",
@@ -64,8 +65,15 @@ export async function PATCH(req: Request) {
     }
   }
 
-  const { surname, firstName, sex, occupation, faculty, program, level, constituency, hasVotersId, phone, whatsapp, signature } =
+  const { surname, firstName, email, sex, occupation, faculty, program, level, constituency, hasVotersId, phone, whatsapp, signature } =
     parsed.data;
+
+  const emailTaken = await prisma.user.findFirst({
+    where: { email, NOT: { id: session.user.id } },
+  });
+  if (emailTaken) {
+    return NextResponse.json({ error: "Email already in use" }, { status: 409 });
+  }
 
   await prisma.user.update({
     where: { id: session.user.id },
@@ -73,6 +81,7 @@ export async function PATCH(req: Request) {
       fullName: `${firstName} ${surname}`,
       surname,
       firstName,
+      email,
       dateOfBirth,
       sex,
       occupation,

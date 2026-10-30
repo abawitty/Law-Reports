@@ -6,9 +6,11 @@ import { useRouter } from "next/navigation";
 export function CompleteProfileForm({
   initialSurname,
   initialFirstName,
+  initialEmail,
 }: {
   initialSurname: string;
   initialFirstName: string;
+  initialEmail: string;
 }) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
@@ -69,6 +71,20 @@ export function CompleteProfileForm({
             className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-brand-green focus:outline-none focus:ring-1 focus:ring-brand-green"
           />
         </div>
+      </div>
+
+      <div>
+        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+          Email address
+        </label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          required
+          defaultValue={initialEmail}
+          className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-brand-green focus:outline-none focus:ring-1 focus:ring-brand-green"
+        />
       </div>
 
       <div className="grid grid-cols-2 gap-4">

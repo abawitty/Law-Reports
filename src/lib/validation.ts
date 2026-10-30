@@ -47,6 +47,7 @@ export const changePasswordSchema = z
 export const completeProfileSchema = z.object({
   surname: z.string().trim().min(1, "Enter your surname"),
   firstName: z.string().trim().min(1, "Enter your first name"),
+  email: z.string().trim().email("Enter a valid email address"),
   dateOfBirth: z.string().trim().min(1, "Enter your date of birth"),
   sex: z.enum(["Male", "Female"], { message: "Select your sex" }),
   occupation: z.string().trim().min(1, "Enter your occupation"),
