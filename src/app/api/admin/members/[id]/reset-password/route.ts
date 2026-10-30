@@ -6,11 +6,18 @@ import { generateTempPassword } from "@/lib/generate-password";
 import { sendEmail, loginUrl } from "@/lib/email";
 import { importWelcomeEmail } from "@/lib/email-templates";
 import { getPageContent } from "@/lib/content";
+import { canManageMemberCredentials } from "@/lib/constants";
 
 export async function POST(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const check = await getAdminSession();
   if ("error" in check) {
     return NextResponse.json({ error: check.error }, { status: check.status });
+  }
+  if (!canManageMemberCredentials(check.session.user.role)) {
+    return NextResponse.json(
+      { error: "You don't have permission to reset member passwords" },
+      { status: 403 },
+    );
   }
 
   const { id } = await params;

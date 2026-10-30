@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { hasAdminPortalAccess } from "@/lib/constants";
 
 export async function GET(_req: Request, { params }: { params: Promise<{ userId: string }> }) {
   const session = await auth();
@@ -10,7 +11,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ userId:
 
   const { userId } = await params;
   const isSelf = session.user.id === userId;
-  const isAdmin = session.user.role === "ADMIN" || session.user.role === "EXECUTIVE";
+  const isAdmin = hasAdminPortalAccess(session.user.role);
   if (!isSelf && !isAdmin) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }

@@ -4,11 +4,18 @@ import { getAdminSession } from "@/lib/api-auth";
 import { sendEmail, loginUrl } from "@/lib/email";
 import { approvalEmail } from "@/lib/email-templates";
 import { getPageContent } from "@/lib/content";
+import { canManageMemberCredentials } from "@/lib/constants";
 
 export async function POST(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const check = await getAdminSession();
   if ("error" in check) {
     return NextResponse.json({ error: check.error }, { status: check.status });
+  }
+  if (!canManageMemberCredentials(check.session.user.role)) {
+    return NextResponse.json(
+      { error: "You don't have permission to resend member emails" },
+      { status: 403 },
+    );
   }
 
   const { id } = await params;

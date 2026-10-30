@@ -6,13 +6,14 @@ import { PageHero } from "@/components/page-hero";
 import { CreateElectionForm } from "@/components/create-election-form";
 import { ElectionAdminCard } from "@/components/election-admin-card";
 import { AdminRequestsPanel } from "@/components/admin-requests-panel";
+import { canManageExecutiveAccounts } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Admin Panel",
 };
 
 export default async function AdminPage() {
-  await requireAdmin();
+  const viewer = await requireAdmin();
 
   const [elections, requests, memberCount] = await Promise.all([
     prisma.election.findMany({
@@ -23,7 +24,7 @@ export default async function AdminPage() {
       include: { user: { select: { fullName: true, studentId: true } } },
       orderBy: { createdAt: "desc" },
     }),
-    prisma.user.count(),
+    prisma.user.count({ where: { role: "MEMBER" } }),
   ]);
 
   return (
@@ -54,6 +55,14 @@ export default async function AdminPage() {
           >
             Manage Photo Gallery →
           </Link>
+          {canManageExecutiveAccounts(viewer.role) && (
+            <Link
+              href="/dashboard/admin/executives"
+              className="inline-block rounded-md border border-brand-green px-4 py-2 text-sm font-semibold text-brand-green hover:bg-brand-green/5"
+            >
+              Executive Accounts →
+            </Link>
+          )}
         </div>
 
         <div>

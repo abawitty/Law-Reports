@@ -5,11 +5,19 @@ import { computeNextMembershipNumber } from "@/lib/membership-number";
 import { sendEmail, loginUrl } from "@/lib/email";
 import { approvalEmail } from "@/lib/email-templates";
 import { getPageContent } from "@/lib/content";
+import { canGiveFinalApproval, canPartiallyApprove } from "@/lib/constants";
 
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const check = await getAdminSession();
   if ("error" in check) {
     return NextResponse.json({ error: check.error }, { status: check.status });
+  }
+  const role = check.session.user.role;
+  if (!canPartiallyApprove(role)) {
+    return NextResponse.json(
+      { error: "You don't have permission to approve members" },
+      { status: 403 },
+    );
   }
 
   const { id } = await params;
@@ -22,6 +30,24 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       { error: "This member already has a membership number" },
       { status: 400 },
     );
+  }
+
+  // The Vice President (or anyone who can only partially approve) can mark
+  // a pending application as reviewed, but it stays short of a membership
+  // number — and therefore short of unlocking the member's dashboard —
+  // until the President (or Admin) gives final approval.
+  if (!canGiveFinalApproval(role)) {
+    if (user.approvalStatus === "PARTIALLY_APPROVED") {
+      return NextResponse.json(
+        { error: "Already partially approved — awaiting the President's final approval" },
+        { status: 400 },
+      );
+    }
+    await prisma.user.update({
+      where: { id },
+      data: { approvalStatus: "PARTIALLY_APPROVED" },
+    });
+    return NextResponse.json({ ok: true, partial: true });
   }
 
   const body = await req.json().catch(() => ({}));
