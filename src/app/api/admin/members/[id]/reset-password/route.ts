@@ -28,6 +28,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
   });
 
   let emailed = false;
+  let emailError: string | undefined;
   if (user.email) {
     const emailContent = await getPageContent("emails");
     const { subject, html } = importWelcomeEmail(
@@ -40,7 +41,8 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
     );
     const result = await sendEmail({ to: user.email, subject, html });
     emailed = result.sent;
+    emailError = result.error;
   }
 
-  return NextResponse.json({ ok: true, newPassword, emailed });
+  return NextResponse.json({ ok: true, newPassword, emailed, emailError });
 }

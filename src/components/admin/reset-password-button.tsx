@@ -8,6 +8,7 @@ export function ResetPasswordButton({ userId }: { userId: string }) {
   const [loading, setLoading] = useState(false);
   const [newPassword, setNewPassword] = useState<string | null>(null);
   const [emailed, setEmailed] = useState(false);
+  const [emailError, setEmailError] = useState<string | null>(null);
 
   async function handleReset() {
     if (!confirm("Reset this member's password? They will need to set a new one on next login.")) {
@@ -20,6 +21,7 @@ export function ResetPasswordButton({ userId }: { userId: string }) {
     if (res.ok) {
       setNewPassword(data.newPassword);
       setEmailed(Boolean(data.emailed));
+      setEmailError(data.emailError ?? null);
       router.refresh();
     }
   }
@@ -34,7 +36,7 @@ export function ResetPasswordButton({ userId }: { userId: string }) {
           {newPassword}
         </span>
         <span className="text-[10px] text-gray-500">
-          {emailed ? "Emailed to member" : "Not emailed — no email on file or send failed"}
+          {emailed ? "Emailed to member" : emailError ? `Not emailed: ${emailError}` : "Not emailed — no email on file"}
         </span>
       </span>
     );
