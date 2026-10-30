@@ -52,6 +52,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ userId: 
       faculty: user.faculty ?? "",
       constituency: user.constituency ?? "",
       dateIssued,
+      position: user.position,
       photoDataUri: photo ? toDataUri(Buffer.from(photo.data), photo.mimeType) : null,
       logoDataUri: logo ? toDataUri(Buffer.from(logo.data), logo.mimeType) : null,
     }),

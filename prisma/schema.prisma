@@ -29,6 +29,10 @@ model User {
   studentId          String    @unique
   membershipNumber   String?   @unique
   membershipIssuedAt DateTime?
+  // Executive title (e.g. "Organizer", "Treasurer", "Vice President") shown
+  // embossed on the member's ID card. Independent of `role` — most holders
+  // of a title are plain members with no Admin Portal access.
+  position           String?
   approvalStatus     String    @default("APPROVED")
   email              String?   @unique
   phone              String?

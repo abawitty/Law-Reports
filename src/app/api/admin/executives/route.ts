@@ -3,7 +3,8 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { getAdminSession } from "@/lib/api-auth";
 import { generateTempPassword } from "@/lib/generate-password";
-import { canManageExecutiveAccounts, ROLES, type Role } from "@/lib/constants";
+import { canManageExecutiveAccounts, ROLE_LABELS, ROLES, type Role } from "@/lib/constants";
+import { computeNextMembershipNumber } from "@/lib/membership-number";
 
 const CREATABLE_ROLES: Role[] = ["SECRETARY", "VICE_PRESIDENT", "PRESIDENT"];
 
@@ -42,11 +43,20 @@ export async function POST(req: Request) {
   const initialPassword = generateTempPassword();
   const passwordHash = await bcrypt.hash(initialPassword, 10);
 
+  // Officers are members too — give them a membership number straight away
+  // (same pool/pattern as regular approvals) so their ID card works, with
+  // their position defaulted to their role (e.g. "Vice President"); either
+  // can be edited later from Registered Members / Executive Accounts.
+  const membershipNumber = await computeNextMembershipNumber();
+
   await prisma.user.create({
     data: {
       fullName,
       studentId,
       role: role as Role,
+      position: ROLE_LABELS[role as Role],
+      membershipNumber,
+      membershipIssuedAt: new Date(),
       approvalStatus: "APPROVED",
       passwordHash,
       mustChangePassword: true,
