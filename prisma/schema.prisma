@@ -9,8 +9,16 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  // DATABASE_URL should be Neon's pooled connection string (the one with
+  // "-pooler" in the hostname) — the app's normal runtime queries go
+  // through it. Migrations use directUrl instead: Neon's pooler doesn't
+  // reliably support the session-level advisory lock `prisma migrate`
+  // takes out, which causes migrate deploy to hang and time out trying to
+  // acquire it. DIRECT_URL should be the same connection string without
+  // "-pooler" in the hostname.
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
