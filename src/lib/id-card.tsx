@@ -6,6 +6,7 @@ export type IdCardData = {
   faculty: string;
   constituency: string;
   dateIssued: string | null;
+  position: string | null;
   photoDataUri: string | null;
   logoDataUri: string | null;
 };
@@ -144,7 +145,32 @@ export function IdCard(data: IdCardData) {
         }}
       >
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          {field("Name", data.fullName.toUpperCase())}
+          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            {field("Name", data.fullName.toUpperCase())}
+            {data.position && (
+              <div
+                style={{
+                  display: "flex",
+                  alignSelf: "flex-start",
+                  border: "1.5px solid #e8c65a",
+                  borderRadius: 4,
+                  padding: "3px 10px",
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: 14,
+                    fontWeight: 700,
+                    letterSpacing: 1.5,
+                    textTransform: "uppercase",
+                    color: "#e8c65a",
+                  }}
+                >
+                  {data.position}
+                </span>
+              </div>
+            )}
+          </div>
           {field("Membership No.", data.membershipNumber)}
           {field("Faculty", data.faculty)}
           {field("Constituency", data.constituency)}

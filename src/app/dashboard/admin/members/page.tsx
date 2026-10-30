@@ -7,7 +7,13 @@ import { ResetPasswordButton } from "@/components/admin/reset-password-button";
 import { ApproveMemberButton } from "@/components/admin/approve-member-button";
 import { ResendApprovalEmailButton } from "@/components/admin/resend-approval-email-button";
 import { EditIssuedDateButton } from "@/components/admin/edit-issued-date-button";
-import { canGiveFinalApproval, canManageMemberCredentials, canPartiallyApprove } from "@/lib/constants";
+import { EditPositionButton } from "@/components/admin/edit-position-button";
+import {
+  canGiveFinalApproval,
+  canManageExecutiveAccounts,
+  canManageMemberCredentials,
+  canPartiallyApprove,
+} from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Members",
@@ -30,6 +36,7 @@ export default async function MembersPage() {
   const viewerCanFinalApprove = canGiveFinalApproval(viewer.role);
   const viewerCanPartialApprove = canPartiallyApprove(viewer.role);
   const viewerCanManageCredentials = canManageMemberCredentials(viewer.role);
+  const viewerCanManageExecutives = canManageExecutiveAccounts(viewer.role);
 
   const members = await prisma.user.findMany({
     where: { role: "MEMBER" },
@@ -78,6 +85,7 @@ export default async function MembersPage() {
                   {[
                     "Photo",
                     "Name",
+                    "Position",
                     "Membership No.",
                     "Status",
                     "Member ID",
@@ -127,6 +135,7 @@ export default async function MembersPage() {
                         </span>
                       )}
                     </td>
+                    <td className="whitespace-nowrap px-3 py-2 text-gray-600">{m.position ?? "—"}</td>
                     <td className="whitespace-nowrap px-3 py-2 font-mono text-gray-600">
                       {m.membershipNumber ?? (
                         <ApproveMemberButton
@@ -197,6 +206,9 @@ export default async function MembersPage() {
                             userId={m.id}
                             initialIssuedAt={m.membershipIssuedAt?.toISOString() ?? null}
                           />
+                        )}
+                        {viewerCanManageExecutives && (
+                          <EditPositionButton userId={m.id} initialPosition={m.position} />
                         )}
                       </div>
                     </td>
