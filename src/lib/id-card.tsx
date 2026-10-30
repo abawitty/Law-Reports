@@ -5,6 +5,7 @@ export type IdCardData = {
   membershipNumber: string;
   faculty: string;
   constituency: string;
+  dateIssued: string | null;
   photoDataUri: string | null;
   logoDataUri: string | null;
 };
@@ -150,30 +151,37 @@ export function IdCard(data: IdCardData) {
           {field("Chapter", "Kings University College")}
         </div>
 
-        <div
-          style={{
-            display: "flex",
-            width: 220,
-            height: 260,
-            borderRadius: 14,
-            border: "4px solid rgba(255,255,255,0.85)",
-            background: PLACEHOLDER_PHOTO_BG,
-            overflow: "hidden",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          {data.photoDataUri ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={data.photoDataUri}
-              alt=""
-              width={220}
-              height={260}
-              style={{ objectFit: "cover" }}
-            />
-          ) : (
-            <span style={{ fontSize: 16, color: "#9ca3af" }}>No Photo</span>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
+          <div
+            style={{
+              display: "flex",
+              width: 220,
+              height: 260,
+              borderRadius: 14,
+              border: "4px solid rgba(255,255,255,0.85)",
+              background: PLACEHOLDER_PHOTO_BG,
+              overflow: "hidden",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {data.photoDataUri ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={data.photoDataUri}
+                alt=""
+                width={220}
+                height={260}
+                style={{ objectFit: "cover" }}
+              />
+            ) : (
+              <span style={{ fontSize: 16, color: "#9ca3af" }}>No Photo</span>
+            )}
+          </div>
+          {data.dateIssued && (
+            <span style={{ fontSize: 14, color: "rgba(255,255,255,0.75)" }}>
+              Issued {data.dateIssued}
+            </span>
           )}
         </div>
       </div>

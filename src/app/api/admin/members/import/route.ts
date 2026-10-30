@@ -207,6 +207,7 @@ export async function POST(req: Request) {
         firstName: d.firstName || null,
         studentId,
         membershipNumber: d.membershipNumber,
+        membershipIssuedAt: d.membershipNumber ? new Date() : null,
         email: d.email,
         phone: cell(d.r, fieldMap, "phone") || null,
         whatsapp: cell(d.r, fieldMap, "whatsapp") || null,

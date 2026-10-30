@@ -3,10 +3,15 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+function currentMonth(): string {
+  return new Date().toISOString().slice(0, 7);
+}
+
 export function ApproveMemberButton({ userId }: { userId: string }) {
   const router = useRouter();
   const [editing, setEditing] = useState(false);
   const [override, setOverride] = useState("");
+  const [issuedMonth, setIssuedMonth] = useState(currentMonth);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [assigned, setAssigned] = useState<string | null>(null);
@@ -17,7 +22,10 @@ export function ApproveMemberButton({ userId }: { userId: string }) {
     const res = await fetch(`/api/admin/members/${userId}/approve`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ membershipNumber: override || undefined }),
+      body: JSON.stringify({
+        membershipNumber: override || undefined,
+        issuedAt: issuedMonth ? `${issuedMonth}-01` : undefined,
+      }),
     });
     const data = await res.json().catch(() => ({}));
     setLoading(false);
@@ -66,6 +74,15 @@ export function ApproveMemberButton({ userId }: { userId: string }) {
           {loading ? "…" : "Confirm"}
         </button>
       </div>
+      <label className="flex items-center gap-1 text-[10px] text-gray-500">
+        Date issued
+        <input
+          type="month"
+          value={issuedMonth}
+          onChange={(e) => setIssuedMonth(e.target.value)}
+          className="rounded-md border border-gray-300 px-1 py-0.5 text-[10px] focus:border-brand-green focus:outline-none focus:ring-1 focus:ring-brand-green"
+        />
+      </label>
     </div>
   );
 }

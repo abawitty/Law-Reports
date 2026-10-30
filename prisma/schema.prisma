@@ -28,6 +28,7 @@ model User {
   firstName          String?
   studentId          String    @unique
   membershipNumber   String?   @unique
+  membershipIssuedAt DateTime?
   approvalStatus     String    @default("APPROVED")
   email              String?   @unique
   phone              String?
