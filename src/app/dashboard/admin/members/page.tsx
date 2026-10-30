@@ -158,6 +158,15 @@ export default async function MembersPage() {
                         {m.membershipNumber && m.email && (
                           <ResendApprovalEmailButton userId={m.id} />
                         )}
+                        {m.membershipNumber && (
+                          <a
+                            href={`/api/member-id-card/${m.id}?download=1`}
+                            download
+                            className="rounded-md border border-gray-300 px-2 py-1 text-center text-xs font-medium text-gray-600 hover:bg-gray-100"
+                          >
+                            ID Card
+                          </a>
+                        )}
                       </div>
                     </td>
                   </tr>

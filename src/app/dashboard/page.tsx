@@ -140,6 +140,30 @@ export default async function DashboardPage() {
           </div>
         </div>
 
+        {user.membershipNumber && (
+          <div>
+            <h2 className="text-xl font-bold text-brand-green-dark">Your Membership ID Card</h2>
+            <p className="mt-1 text-sm text-gray-600">
+              Download a copy to keep on your phone or print.
+            </p>
+            <div className="mt-4 max-w-xl overflow-hidden rounded-xl border border-black/10 shadow-sm">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={`/api/member-id-card/${user.id}`}
+                alt="Your membership ID card"
+                className="w-full"
+              />
+            </div>
+            <a
+              href={`/api/member-id-card/${user.id}?download=1`}
+              download
+              className="mt-3 inline-block rounded-md bg-brand-green px-4 py-2 text-sm font-semibold text-white hover:bg-brand-green-dark"
+            >
+              Download ID Card
+            </a>
+          </div>
+        )}
+
         <div>
           <h2 className="text-xl font-bold text-brand-green-dark">Change Password</h2>
           <div className="mt-4 max-w-xl">
