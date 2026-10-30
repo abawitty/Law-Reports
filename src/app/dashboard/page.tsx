@@ -10,6 +10,7 @@ import { ElectionsPanel } from "@/components/elections-panel";
 import { RequestForm } from "@/components/request-form";
 import { RequestList } from "@/components/request-list";
 import { isProfileIncomplete } from "@/lib/profile";
+import { hasAdminPortalAccess } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "My Dashboard",
@@ -58,12 +59,17 @@ export default async function DashboardPage() {
   }
 
   if (user.approvalStatus !== "APPROVED") {
+    const isPartiallyApproved = user.approvalStatus === "PARTIALLY_APPROVED";
     return (
       <div>
         <PageHero
           eyebrow="Member Dashboard"
           title="Membership Pending Approval"
-          description="Your registration has been received. An executive will review and approve your membership, after which your official membership number will be assigned and your full dashboard unlocked."
+          description={
+            isPartiallyApproved
+              ? "Your registration has been reviewed and is awaiting the President's final approval, after which your official membership number will be assigned and your full dashboard unlocked."
+              : "Your registration has been received. An executive will review and approve your membership, after which your official membership number will be assigned and your full dashboard unlocked."
+          }
         />
         <section className="mx-auto max-w-xl px-4 py-14 sm:px-6">
           <div className="rounded-xl border border-dashed border-black/15 bg-gray-50 p-6 text-sm text-gray-600">
@@ -112,7 +118,7 @@ export default async function DashboardPage() {
         }
       />
 
-      {(user.role === "ADMIN" || user.role === "EXECUTIVE") && (
+      {hasAdminPortalAccess(user.role) && (
         <div className="mx-auto max-w-6xl px-4 pt-8 sm:px-6">
           <Link
             href="/dashboard/admin"

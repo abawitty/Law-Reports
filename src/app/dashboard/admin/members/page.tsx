@@ -7,15 +7,32 @@ import { ResetPasswordButton } from "@/components/admin/reset-password-button";
 import { ApproveMemberButton } from "@/components/admin/approve-member-button";
 import { ResendApprovalEmailButton } from "@/components/admin/resend-approval-email-button";
 import { EditIssuedDateButton } from "@/components/admin/edit-issued-date-button";
+import { canGiveFinalApproval, canManageMemberCredentials, canPartiallyApprove } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Members",
 };
 
+const STATUS_LABELS: Record<string, string> = {
+  APPROVED: "Approved",
+  PARTIALLY_APPROVED: "Partially Approved",
+  PENDING: "Pending",
+};
+
+const STATUS_CLASSES: Record<string, string> = {
+  APPROVED: "bg-brand-green/10 text-brand-green-dark",
+  PARTIALLY_APPROVED: "bg-blue-100 text-blue-800",
+  PENDING: "bg-yellow-100 text-yellow-800",
+};
+
 export default async function MembersPage() {
-  await requireAdmin();
+  const viewer = await requireAdmin();
+  const viewerCanFinalApprove = canGiveFinalApproval(viewer.role);
+  const viewerCanPartialApprove = canPartiallyApprove(viewer.role);
+  const viewerCanManageCredentials = canManageMemberCredentials(viewer.role);
 
   const members = await prisma.user.findMany({
+    where: { role: "MEMBER" },
     orderBy: { createdAt: "desc" },
     include: { photo: { select: { id: true } } },
   });
@@ -112,18 +129,21 @@ export default async function MembersPage() {
                     </td>
                     <td className="whitespace-nowrap px-3 py-2 font-mono text-gray-600">
                       {m.membershipNumber ?? (
-                        <ApproveMemberButton userId={m.id} />
+                        <ApproveMemberButton
+                          userId={m.id}
+                          approvalStatus={m.approvalStatus}
+                          canFinalApprove={viewerCanFinalApprove}
+                          canPartialApprove={viewerCanPartialApprove}
+                        />
                       )}
                     </td>
                     <td className="whitespace-nowrap px-3 py-2">
                       <span
                         className={`rounded-full px-2 py-0.5 text-xs font-semibold ${
-                          m.approvalStatus === "APPROVED"
-                            ? "bg-brand-green/10 text-brand-green-dark"
-                            : "bg-yellow-100 text-yellow-800"
+                          STATUS_CLASSES[m.approvalStatus] ?? STATUS_CLASSES.PENDING
                         }`}
                       >
-                        {m.approvalStatus === "APPROVED" ? "Approved" : "Pending"}
+                        {STATUS_LABELS[m.approvalStatus] ?? "Pending"}
                       </span>
                     </td>
                     <td className="whitespace-nowrap px-3 py-2 text-gray-600">{m.studentId}</td>
@@ -155,9 +175,13 @@ export default async function MembersPage() {
                     </td>
                     <td className="whitespace-nowrap px-3 py-2">
                       <div className="flex flex-col gap-1.5">
-                        <ResetPasswordButton userId={m.id} />
-                        {m.membershipNumber && m.email && (
-                          <ResendApprovalEmailButton userId={m.id} />
+                        {viewerCanManageCredentials && (
+                          <>
+                            <ResetPasswordButton userId={m.id} />
+                            {m.membershipNumber && m.email && (
+                              <ResendApprovalEmailButton userId={m.id} />
+                            )}
+                          </>
                         )}
                         {m.membershipNumber && (
                           <a

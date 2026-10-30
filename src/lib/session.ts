@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
+import { hasAdminPortalAccess } from "@/lib/constants";
 
 export async function requireUser() {
   const session = await auth();
@@ -9,6 +10,6 @@ export async function requireUser() {
 
 export async function requireAdmin() {
   const user = await requireUser();
-  if (user.role !== "ADMIN" && user.role !== "EXECUTIVE") redirect("/dashboard");
+  if (!hasAdminPortalAccess(user.role)) redirect("/dashboard");
   return user;
 }
