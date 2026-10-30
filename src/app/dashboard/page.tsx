@@ -50,6 +50,7 @@ export default async function DashboardPage() {
           <CompleteProfileForm
             initialSurname={user.surname ?? ""}
             initialFirstName={user.firstName ?? ""}
+            initialEmail={user.email ?? ""}
           />
         </section>
       </div>
