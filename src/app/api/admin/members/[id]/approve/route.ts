@@ -37,9 +37,14 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     );
   }
 
+  const issuedAtRaw = typeof body?.issuedAt === "string" ? body.issuedAt.trim() : "";
+  const parsedIssuedAt = issuedAtRaw ? new Date(issuedAtRaw) : null;
+  const membershipIssuedAt =
+    parsedIssuedAt && !Number.isNaN(parsedIssuedAt.getTime()) ? parsedIssuedAt : new Date();
+
   await prisma.user.update({
     where: { id },
-    data: { membershipNumber, approvalStatus: "APPROVED" },
+    data: { membershipNumber, membershipIssuedAt, approvalStatus: "APPROVED" },
   });
 
   if (user.email) {

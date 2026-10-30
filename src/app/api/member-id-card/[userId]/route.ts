@@ -37,12 +37,20 @@ export async function GET(req: Request, { params }: { params: Promise<{ userId: 
     );
   }
 
+  const dateIssued = user.membershipIssuedAt
+    ? new Date(user.membershipIssuedAt).toLocaleDateString("en-US", {
+        month: "long",
+        year: "numeric",
+      })
+    : null;
+
   const image = new ImageResponse(
     IdCard({
       fullName: user.fullName,
       membershipNumber: user.membershipNumber,
       faculty: user.faculty ?? "",
       constituency: user.constituency ?? "",
+      dateIssued,
       photoDataUri: photo ? toDataUri(Buffer.from(photo.data), photo.mimeType) : null,
       logoDataUri: logo ? toDataUri(Buffer.from(logo.data), logo.mimeType) : null,
     }),
