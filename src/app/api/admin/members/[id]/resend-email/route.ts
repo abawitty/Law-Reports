@@ -31,7 +31,10 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
   const result = await sendEmail({ to: user.email, subject, html });
 
   if (!result.sent) {
-    return NextResponse.json({ error: "Email could not be sent — check server logs" }, { status: 502 });
+    return NextResponse.json(
+      { error: `Email could not be sent: ${result.error ?? "unknown error"}` },
+      { status: 502 },
+    );
   }
 
   return NextResponse.json({ ok: true });
