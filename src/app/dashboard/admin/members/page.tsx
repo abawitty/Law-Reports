@@ -8,6 +8,7 @@ import { ApproveMemberButton } from "@/components/admin/approve-member-button";
 import { ResendApprovalEmailButton } from "@/components/admin/resend-approval-email-button";
 import { EditIssuedDateButton } from "@/components/admin/edit-issued-date-button";
 import { EditPositionButton } from "@/components/admin/edit-position-button";
+import { DeleteMemberButton } from "@/components/admin/delete-member-button";
 import {
   canGiveFinalApproval,
   canManageExecutiveAccounts,
@@ -64,6 +65,7 @@ export default async function MembersPage() {
             >
               Bulk Import (CSV)
             </Link>
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages -- downloads a CSV file from an API route, not a page */}
             <a
               href="/api/admin/members/export"
               className="rounded-md bg-brand-green px-4 py-2 text-sm font-semibold text-white hover:bg-brand-green-dark"
@@ -208,7 +210,10 @@ export default async function MembersPage() {
                           />
                         )}
                         {viewerCanManageExecutives && (
-                          <EditPositionButton userId={m.id} initialPosition={m.position} />
+                          <>
+                            <EditPositionButton userId={m.id} initialPosition={m.position} />
+                            <DeleteMemberButton userId={m.id} fullName={m.fullName} />
+                          </>
                         )}
                       </div>
                     </td>
