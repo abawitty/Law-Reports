@@ -4,6 +4,8 @@ import { getAdminSession } from "@/lib/api-auth";
 import { computeNextMembershipNumber } from "@/lib/membership-number";
 import { sendEmail, loginUrl } from "@/lib/email";
 import { approvalEmail } from "@/lib/email-templates";
+import { sendSms } from "@/lib/sms";
+import { approvalSms } from "@/lib/sms-templates";
 import { getPageContent } from "@/lib/content";
 import { canGiveFinalApproval, canPartiallyApprove } from "@/lib/constants";
 
@@ -77,6 +79,9 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     const emailContent = await getPageContent("emails");
     const { subject, html } = approvalEmail(emailContent, user.fullName, membershipNumber, loginUrl());
     await sendEmail({ to: user.email, subject, html });
+  }
+  if (user.phone) {
+    await sendSms({ to: user.phone, message: approvalSms(membershipNumber, loginUrl()) });
   }
 
   return NextResponse.json({ ok: true, membershipNumber });
