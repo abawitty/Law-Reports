@@ -11,7 +11,7 @@ export function DeleteMemberButton({ userId, fullName }: { userId: string; fullN
   async function handleDelete() {
     if (
       !confirm(
-        `Permanently delete ${fullName}? This removes their account, photo, votes, and submitted requests. This can't be undone.`,
+        `Delete ${fullName}? They'll lose access immediately and move to the Deleted Members list, where the President can reinstate them later with everything intact.`,
       )
     ) {
       return;

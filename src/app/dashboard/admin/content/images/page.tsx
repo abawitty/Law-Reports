@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { requireAdmin } from "@/lib/session";
+import { requireGeneralAdmin } from "@/lib/session";
 import { PageHero } from "@/components/page-hero";
 import { ImageUploadField } from "@/components/admin/image-upload-field";
 import { getSiteImageMeta, siteImageUrl } from "@/lib/site-images";
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ImagesContentPage() {
-  await requireAdmin();
+  await requireGeneralAdmin();
 
   const [teinKucLogo, ndcLogo, presidentPhoto, nationalLeaderPhoto, homeHeroPhoto] =
     await Promise.all([

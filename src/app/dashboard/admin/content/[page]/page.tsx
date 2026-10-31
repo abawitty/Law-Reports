@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { requireAdmin } from "@/lib/session";
+import { requireGeneralAdmin } from "@/lib/session";
 import { PageHero } from "@/components/page-hero";
 import { getPageContent } from "@/lib/content";
 import { PAGE_SLUGS, type PageSlug } from "@/lib/content-defaults";
@@ -38,7 +38,7 @@ export default async function PageContentEditor({
 }: {
   params: Promise<{ page: string }>;
 }) {
-  await requireAdmin();
+  await requireGeneralAdmin();
   const { page } = await params;
 
   if (!PAGE_SLUGS.includes(page as PageSlug)) notFound();

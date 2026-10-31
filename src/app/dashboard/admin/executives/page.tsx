@@ -20,7 +20,7 @@ export default async function ExecutiveAccountsPage() {
   }
 
   const executives = await prisma.user.findMany({
-    where: { role: { not: "MEMBER" } },
+    where: { role: { not: "MEMBER" }, deletedAt: null },
     orderBy: { createdAt: "asc" },
     select: {
       id: true,
