@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { requireAdmin } from "@/lib/session";
+import { requireGeneralAdmin } from "@/lib/session";
 import { PageHero } from "@/components/page-hero";
 import { prisma } from "@/lib/prisma";
 import { CreatePageForm } from "@/components/admin/create-page-form";
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default async function CustomPagesIndex() {
-  await requireAdmin();
+  await requireGeneralAdmin();
 
   const pages = await prisma.customPage.findMany({ orderBy: { navOrder: "asc" } });
 

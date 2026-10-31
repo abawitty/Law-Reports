@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { requireAdmin } from "@/lib/session";
+import { requireGeneralAdmin } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 import { isBlockArray } from "@/lib/blocks";
 import { PageBuilder } from "@/components/admin/page-builder";
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 export default async function EditCustomPage({ params }: { params: Promise<{ id: string }> }) {
-  await requireAdmin();
+  await requireGeneralAdmin();
   const { id } = await params;
 
   const page = await prisma.customPage.findUnique({ where: { id } });

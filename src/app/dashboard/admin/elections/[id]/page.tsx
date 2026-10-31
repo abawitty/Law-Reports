@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { requireAdmin } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 import { PageHero } from "@/components/page-hero";
 import { AddPositionForm } from "@/components/add-position-form";
 import { AddCandidateForm } from "@/components/add-candidate-form";
+import { canManageElections } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Manage Election",
@@ -16,7 +17,10 @@ export default async function ManageElectionPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  await requireAdmin();
+  const viewer = await requireAdmin();
+  if (!canManageElections(viewer.role)) {
+    redirect("/dashboard/admin");
+  }
   const { id } = await params;
 
   const election = await prisma.election.findUnique({

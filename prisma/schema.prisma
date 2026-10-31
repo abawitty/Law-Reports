@@ -50,6 +50,11 @@ model User {
   passwordHash       String
   mustChangePassword Boolean   @default(false)
   role               String    @default("MEMBER")
+  // Soft delete: set by the President/Admin "Delete" action instead of a
+  // real row delete, so the member (and their photo/votes/requests) can be
+  // reinstated later. Excluded from all normal member listings and from
+  // login while set.
+  deletedAt          DateTime?
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt
 

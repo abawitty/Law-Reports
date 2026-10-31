@@ -34,6 +34,20 @@ export function ElectionAdminCard({ election }: { election: Election }) {
     router.refresh();
   }
 
+  async function handleDelete() {
+    if (
+      !confirm(
+        `Permanently delete "${election.title}"? This removes all its positions, candidates, and any votes already cast. This can't be undone.`,
+      )
+    ) {
+      return;
+    }
+    setLoading(true);
+    await fetch(`/api/admin/elections/${election.id}`, { method: "DELETE" });
+    setLoading(false);
+    router.refresh();
+  }
+
   return (
     <div className="rounded-xl border border-black/10 p-5">
       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -87,6 +101,13 @@ export function ElectionAdminCard({ election }: { election: Election }) {
             Re-open
           </button>
         )}
+        <button
+          disabled={loading}
+          onClick={handleDelete}
+          className="rounded-md border border-brand-red px-3 py-1.5 text-xs font-medium text-brand-red hover:bg-brand-red/5 disabled:opacity-60"
+        >
+          Delete
+        </button>
       </div>
     </div>
   );

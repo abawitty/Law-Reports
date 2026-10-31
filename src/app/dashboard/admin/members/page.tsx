@@ -40,7 +40,7 @@ export default async function MembersPage() {
   const viewerCanManageExecutives = canManageExecutiveAccounts(viewer.role);
 
   const members = await prisma.user.findMany({
-    where: { role: "MEMBER" },
+    where: { role: "MEMBER", deletedAt: null },
     orderBy: { createdAt: "desc" },
     include: { photo: { select: { id: true } } },
   });

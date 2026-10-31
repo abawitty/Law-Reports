@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { requireAdmin } from "@/lib/session";
+import { requireGeneralAdmin } from "@/lib/session";
 import { PageHero } from "@/components/page-hero";
 import { PAGE_SLUGS } from "@/lib/content-defaults";
 
@@ -23,7 +23,7 @@ const PAGE_DESCRIPTIONS: Record<string, string> = {
 };
 
 export default async function ContentIndexPage() {
-  await requireAdmin();
+  await requireGeneralAdmin();
 
   return (
     <div>

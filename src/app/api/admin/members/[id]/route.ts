@@ -21,13 +21,13 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
   }
 
   const user = await prisma.user.findUnique({ where: { id } });
-  if (!user) {
+  if (!user || user.deletedAt) {
     return NextResponse.json({ error: "Account not found" }, { status: 404 });
   }
 
-  // Cascades to their photo, votes, and submitted requests — see
-  // onDelete: Cascade on MemberPhoto/Vote/MemberRequest in schema.prisma.
-  await prisma.user.delete({ where: { id } });
+  // Soft delete: flag the account instead of removing it, so the President
+  // can reinstate it later with everything (photo, votes, requests) intact.
+  await prisma.user.update({ where: { id }, data: { deletedAt: new Date() } });
 
   return NextResponse.json({ ok: true });
 }

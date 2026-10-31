@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 const ROLE_OPTIONS = [
   { value: "VICE_PRESIDENT", label: "Vice President" },
   { value: "SECRETARY", label: "General Secretary" },
+  { value: "EC_CHAIRPERSON", label: "Electoral Commissioner" },
   { value: "PRESIDENT", label: "President" },
 ];
 

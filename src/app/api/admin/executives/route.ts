@@ -6,7 +6,7 @@ import { generateTempPassword } from "@/lib/generate-password";
 import { canManageExecutiveAccounts, ROLE_LABELS, ROLES, type Role } from "@/lib/constants";
 import { computeNextMembershipNumber } from "@/lib/membership-number";
 
-const CREATABLE_ROLES: Role[] = ["SECRETARY", "VICE_PRESIDENT", "PRESIDENT"];
+const CREATABLE_ROLES: Role[] = ["SECRETARY", "VICE_PRESIDENT", "EC_CHAIRPERSON", "PRESIDENT"];
 
 export async function POST(req: Request) {
   const check = await getAdminSession();

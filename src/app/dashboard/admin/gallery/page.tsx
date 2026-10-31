@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { requireAdmin } from "@/lib/session";
+import { requireGeneralAdmin } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 import { PageHero } from "@/components/page-hero";
 import { GalleryUploadForm } from "@/components/admin/gallery-upload-form";
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 export default async function AdminGalleryPage() {
-  await requireAdmin();
+  await requireGeneralAdmin();
 
   const photos = await prisma.galleryPhoto.findMany({
     orderBy: { createdAt: "desc" },
