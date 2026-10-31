@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { PageHero } from "@/components/page-hero";
 import { CreateExecutiveForm } from "@/components/admin/create-executive-form";
 import { EditPositionButton } from "@/components/admin/edit-position-button";
+import { DeleteMemberButton } from "@/components/admin/delete-member-button";
 import { canManageExecutiveAccounts, ROLE_LABELS } from "@/lib/constants";
 
 export const metadata: Metadata = {
@@ -51,7 +52,7 @@ export default async function ExecutiveAccountsPage() {
           <table className="min-w-full divide-y divide-black/10 text-sm">
             <thead className="bg-gray-50">
               <tr>
-                {["Name", "Member ID", "Role", "Position (on ID card)", "Status", "ID Card"].map((h) => (
+                {["Name", "Member ID", "Role", "Position (on ID card)", "Status", "ID Card", "Actions"].map((h) => (
                   <th
                     key={h}
                     className="whitespace-nowrap px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-gray-500"
@@ -94,6 +95,11 @@ export default async function ExecutiveAccountsPage() {
                       </a>
                     ) : (
                       <span className="text-xs text-gray-400">—</span>
+                    )}
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-2">
+                    {e.id !== viewer.id && (
+                      <DeleteMemberButton userId={e.id} fullName={e.fullName} />
                     )}
                   </td>
                 </tr>
