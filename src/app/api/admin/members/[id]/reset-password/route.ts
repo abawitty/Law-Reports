@@ -5,6 +5,8 @@ import { getAdminSession } from "@/lib/api-auth";
 import { generateTempPassword } from "@/lib/generate-password";
 import { sendEmail, loginUrl } from "@/lib/email";
 import { importWelcomeEmail } from "@/lib/email-templates";
+import { sendSms } from "@/lib/sms";
+import { credentialsSms } from "@/lib/sms-templates";
 import { getPageContent } from "@/lib/content";
 import { canManageMemberCredentials } from "@/lib/constants";
 
@@ -51,5 +53,14 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
     emailError = result.error;
   }
 
-  return NextResponse.json({ ok: true, newPassword, emailed, emailError });
+  let smsSent = false;
+  let smsError: string | undefined;
+  if (user.phone) {
+    const message = credentialsSms(user.studentId, user.membershipNumber, newPassword, loginUrl());
+    const result = await sendSms({ to: user.phone, message });
+    smsSent = result.sent;
+    smsError = result.error;
+  }
+
+  return NextResponse.json({ ok: true, newPassword, emailed, emailError, smsSent, smsError });
 }

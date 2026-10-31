@@ -8,6 +8,8 @@ import { getAdminSession } from "@/lib/api-auth";
 import { generateTempPassword } from "@/lib/generate-password";
 import { sendEmail, loginUrl } from "@/lib/email";
 import { importWelcomeEmail } from "@/lib/email-templates";
+import { sendSms } from "@/lib/sms";
+import { credentialsSms } from "@/lib/sms-templates";
 import { getPageContent } from "@/lib/content";
 
 // Bulk imports can involve hundreds of rows; give the route more room than
@@ -264,6 +266,25 @@ export async function POST(req: Request) {
           url,
         );
         return sendEmail({ to: item.data.email!, subject, html });
+      }),
+    );
+  }
+
+  // Text login details to every newly created member who has a phone number
+  // on file — independent of whether they also got an email, so members
+  // without an email address on record aren't left without their
+  // credentials.
+  const toText = toCreate.filter((item) => item.data.phone);
+  if (toText.length > 0) {
+    await Promise.allSettled(
+      toText.map((item) => {
+        const message = credentialsSms(
+          item.row.studentId,
+          item.data.membershipNumber ?? null,
+          item.row.initialPassword!,
+          url,
+        );
+        return sendSms({ to: item.data.phone!, message });
       }),
     );
   }
